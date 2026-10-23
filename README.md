@@ -8,7 +8,7 @@ AZİMap, tek HTML dosyasıyla çalışan Türkçe harita ve alan çizim uygulama
 2. Tam kullanım ve mobil yükleme için ZIP içindeki tüm dosyaları bir HTTPS web alanına koyun. GitHub Pages için ZIP'i açıp `index.html`, `manifest.json`, `sw.js` ve `icon.svg` dosyalarını depo kök dizinine yükleyin; depoda **Settings → Pages** bölümünden dağıtımı etkinleştirin.
 3. Yayına aldıktan sonra site adresini telefonda açın. Android Chrome'da **Uygulamayı yükle**, iPhone Safari'de **Paylaş → Ana Ekrana Ekle** seçeneklerini kullanın.
 
-Ek bir derleme veya AZİMap API anahtarı gerekmez. Başlangıç altlığı API anahtarı istemeyen CARTO Voyager'dır. OpenStreetMap, CARTO, OpenTopoMap ve Esri seçenekleri de bulunur. Kaynakların erişilebilirliği ağ ve hizmet sağlayıcısına göre değişebilir; uygulama çalışmayan altlık için yedek kaynak kullanır. HTTPS yayını ana uygulama kabuğunu önbelleğe alır; ilk açılış ve harita görselleri için internet bağlantısı gerekir.
+Ek bir derleme veya AZİMap API anahtarı gerekmez. Başlangıç altlığı OpenStreetMap'tir; OpenTopoMap ve Esri seçenekleri de bulunur. Kaynakların erişilebilirliği ağ ve hizmet sağlayıcısına göre değişebilir; uygulama çalışmayan altlık için yedek kaynak kullanır. HTTPS yayını ana uygulama kabuğunu önbelleğe alır; ilk açılış ve harita görselleri için internet bağlantısı gerekir.
 
 ## Aydın sınırları
 
@@ -16,7 +16,7 @@ Aydın mahalle/köy aramalarında ve ilçe seçicisinde ZIP içindeki, kullanıc
 
 ## Altlıklar ve harici harita bağlantıları
 
-Uygulamanın yerleşik OpenStreetMap/CARTO/OpenTopoMap altlıkları için kullanıcı API anahtarı girmez. Google Haritalar ve Yandex Haritalar, uygulama içinde karo kaynağı olarak taklit edilmez; geçerli konumu bu sağlayıcıların kendi sayfasında açan bağlantılar olarak sunulur. Bu, uygulamanın Google/Yandex görsellerini izinsiz çekmesini ve API anahtarı hatası vermesini önler. Uygulama içi Google/Yandex harita entegrasyonu istenirse sağlayıcının resmi API'si, hesabı/anahtarı ve güncel kullanım koşulları ayrıca yapılandırılmalıdır.
+Uygulama CARTO karo kaynaklarını kullanmaz; CARTO anahtarsız isteklerde "API KEY REQUIRED" filigranı gösterir. OpenStreetMap, OpenTopoMap ve Esri altlıkları kullanılır. Google Haritalar ve Yandex Haritalar, uygulama içinde karo kaynağı olarak taklit edilmez; geçerli konumu sağlayıcıların kendi sayfasında açan bağlantılar olarak sunulur. Google Map Tiles API anahtar ve oturum belirteci, Yandex Tiles API anahtar gerektirir. Uygulama içi entegrasyon için sağlayıcı hesabı/anahtarı ve güncel koşullar ayrıca yapılandırılmalıdır.
 
 ## Dışa aktarma ve mobil kullanım
 

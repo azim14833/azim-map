@@ -278,13 +278,13 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
         <option value="otm">Topografik (OpenTopoMap)</option><option value="esrit">Topografik (Esri)</option>
         <option value="natgeo">National Geographic (Esri)</option><option value="terrain">Arazi gölgeli (Esri)</option>
         <option value="esris">Sokak (Esri)</option><option value="osm">Sokak (OpenStreetMap)</option><option value="osmfr">Sokak (OSM Fransa)</option>
-        <option value="cartovoy">Sokak – sade (CARTO)</option><option value="cartolight">Açık gri (CARTO)</option><option value="cartodark">Koyu / gece (CARTO)</option><option value="esridark">Koyu / gece (Esri)</option>
+        <option value="cartovoy">Sokak – sade (OpenStreetMap)</option><option value="cartolight">Açık gri (Esri)</option><option value="cartodark">Koyu / gece (Esri)</option><option value="esridark">Koyu / gece (Esri, alternatif)</option>
          <option value="custom">Özel altlık (aşağıda)</option>
        </select>
        <div class="btns"><a id="googleMapLink" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Google Haritalar’da bu konumu aç ↗</a><a id="yandexMapLink" href="https://yandex.com/maps" target="_blank" rel="noopener noreferrer">Yandex Haritalar’da bu konumu aç ↗</a></div>
        <p class="note">Dış bağlantılar konumu ilgili hizmette açar. Harita görsellerini uygulamaya eklemek için Google/Yandex API anahtarı ve sağlayıcı koşulları gerekir; bu nedenle doğrudan karo adresleri kullanılmaz.</p>
       <label class="chk"><input type="checkbox" id="ovRoads"> Yollar ve sokak adları</label>
-      <label class="chk"><input type="checkbox" id="ovLabels"> Yer adları – sınır çizgisiz (CARTO)</label>
+      <label class="chk"><input type="checkbox" id="ovLabels"> Yer adları ve sınırlar (Esri)</label>
       <label class="chk"><input type="checkbox" id="ovPlaces"> Yer adları ve idari sınırlar (Esri, çizgili)</label>
       <label class="chk"><input type="checkbox" id="ovShade"> Gölge – hesaplanan (SRTM, çevrimiçi)</label>
       <label class="chk"><input type="checkbox" id="ovCont"> İzohips çizgileri – hesaplanan, yükseklik yazılı</label>
@@ -303,7 +303,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
       <label>Saydamlık</label><input type="range" id="lyOp" min="0.1" max="1" step="0.05" value="1">
       <div class="btns"><button class="main" id="lyAdd">Katmanı ekle</button></div>
       <div id="lyList"></div>
-       <p class="note">Eklenen katmanlar altlığın üstüne bindirilir; yukarı oku sırayı değiştirir. Katmanlar PDF, SVG ve KMZ çıktısına da girer. Yerleşik OSM, CARTO, OpenTopoMap ve Esri altlıkları için AZİMap API anahtarı istemez; özel servis adresi kendi sağlayıcısının anahtarını gerektirebilir.</p></div></details>
+       <p class="note">Eklenen katmanlar altlığın üstüne bindirilir; yukarı oku sırayı değiştirir. Katmanlar PDF, SVG ve KMZ çıktısına da girer. OpenStreetMap, OpenTopoMap ve Esri altlıkları için AZİMap API anahtarı gerekmez; özel servis adresi kendi sağlayıcısının anahtarını isteyebilir.</p></div></details>
 <details class="card "><summary>Özel altlık</summary><div class="cbody">
       <p class="note" style="margin-top:0">Elinizde bir harita servisi adresi varsa (örneğin kurumunuzun WMS adresi) buraya girin.</p>
       <label>Tür</label>
@@ -318,7 +318,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
     </div></details>
 <details class="card"><summary>Yakınlaştırma ve görünüm</summary><div class="cbody"><label>Yakınlaştırma hızı</label>
        <select id="zmSpeed"><option value="slow" selected>Yavaş ve yumuşak</option><option value="normal">Normal</option><option value="fast">Hızlı</option></select>
-      <p class="note">Fare tekerleği veya iki parmakla yakınlaştırma kademeli ve akıcıdır. Sınırlar altlıktaki çizgilerle tutmuyorsa Yer adları – sınır çizgisiz seçeneğini ve Sınırlar sekmesindeki Sınır hizalama bölümünü kullanın.</p></div></details>
+      <p class="note">Fare tekerleği veya iki parmakla yakınlaştırma kademeli ve akıcıdır. Altlık üzerindeki ad ve sınır çizgilerini açıp kapatmak için Esri katman seçeneklerini kullanın; idari poligonlar kendi geometrilerinden çizilir.</p></div></details>
 <details class="card"><summary>Altlık durumu</summary><div class="cbody"><p class="note" style="margin-top:0">Her altlığın bu ağda çalışıp çalışmadığı otomatik sınanır. Çalışmayan bir altlık seçilirse yedeği gösterilir.</p><div id="probeList"></div><div class="btns"><button id="probeBtn">Altlıkları yeniden sına</button></div></div></details>
 </div>
 <div class="tab" id="t2"><details class="card" open><summary>Bölge seçici – il, ilçe, mahalle</summary><div class="cbody">
@@ -667,7 +667,6 @@ map.zoomControl.setPosition('bottomright');
 
 /* ================= Katmanlar ================= */
 const ESRI='https://server.arcgisonline.com/ArcGIS/rest/services/';
-const CARTO='https://{s}.basemaps.cartocdn.com/';
 const OTMURL='https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png';
 const DEM_URL='https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
 const BASES={
@@ -680,9 +679,9 @@ const BASES={
   esris:{n:'Sokak (Esri)',url:ESRI+'World_Street_Map/MapServer/tile/{z}/{y}/{x}',alts:['https://services.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}'],sub:['a'],max:19,attr:'Esri, HERE, Garmin, OpenStreetMap katkıcıları',z:1,fb:'esrit'},
   osm:{n:'Sokak (OpenStreetMap)',url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',sub:['a'],max:19,attr:'© OpenStreetMap katkıcıları',z:1,fb:'esris'},
   osmfr:{n:'Sokak (OSM Fransa)',url:'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png',sub:['a','b','c'],max:20,attr:'© OpenStreetMap katkıcıları, OSM France',z:1,fb:'esris'},
-  cartovoy:{n:'Sokak – sade (CARTO)',url:CARTO+'rastertiles/voyager/{z}/{x}/{y}.png',alts:['https://basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'],sub:['a','b','c','d'],max:20,attr:'© OpenStreetMap katkıcıları, © CARTO',z:1,fb:'esris'},
-  cartolight:{n:'Açık gri (CARTO)',url:CARTO+'light_all/{z}/{x}/{y}.png',alts:['https://basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',ESRI+'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'],sub:['a','b','c','d'],max:20,attr:'© OpenStreetMap katkıcıları, © CARTO',z:1,fb:'esris'},
-  cartodark:{n:'Koyu / gece (CARTO)',url:CARTO+'dark_all/{z}/{x}/{y}.png',alts:['https://basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png'],sub:['a','b','c','d'],max:20,attr:'© OpenStreetMap katkıcıları, © CARTO',z:1,fb:'esridark'},
+  cartovoy:{n:'Sokak – sade (OpenStreetMap)',url:'https://tile.openstreetmap.org/{z}/{x}/{y}.png',sub:['a'],max:19,attr:'© OpenStreetMap katkıcıları',z:1,fb:'esris'},
+  cartolight:{n:'Açık gri (Esri)',url:ESRI+'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',alts:['https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}'],sub:['a'],max:16,attr:'Esri, HERE, Garmin',z:1,fb:'esris'},
+  cartodark:{n:'Koyu / gece (Esri)',url:ESRI+'Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',alts:['https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'],sub:['a'],max:16,attr:'Esri, HERE, Garmin',z:1,fb:'esridark'},
   esridark:{n:'Koyu / gece (Esri)',url:ESRI+'Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',alts:['https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}'],sub:['a'],max:16,attr:'Esri, HERE, Garmin',z:1,fb:'esrii'}
 };
 const OVERS={
@@ -692,8 +691,8 @@ const OVERS={
   cont:{gen:'cont',attr:'İzohips: AWS Terrain Tiles (SRTM)',max:16,z:4},
   roads:{url:ESRI+'Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}',sub:['a'],max:19,attr:'Esri',z:5},
   places:{url:ESRI+'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',sub:['a'],max:19,attr:'Esri',z:6},
-  labelsD:{url:CARTO+'dark_only_labels/{z}/{x}/{y}.png',alts:['https://basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}.png'],sub:['a','b','c','d'],max:20,attr:'© OpenStreetMap katkıcıları, © CARTO',z:5},
-  labelsL:{url:CARTO+'light_only_labels/{z}/{x}/{y}.png',alts:['https://basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'],sub:['a','b','c','d'],max:20,attr:'© OpenStreetMap katkıcıları, © CARTO',z:5},
+  labelsD:{url:ESRI+'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',alts:['https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'],sub:['a'],max:19,attr:'Esri, HERE, Garmin',z:5},
+  labelsL:{url:ESRI+'Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',alts:['https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'],sub:['a'],max:19,attr:'Esri, HERE, Garmin',z:5},
   trails:{url:'https://tile.waymarkedtrails.org/hiking/{z}/{x}/{y}.png',sub:['a'],max:18,attr:'© waymarkedtrails.org, OpenStreetMap',z:7},
   rail:{url:'https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png',sub:['a','b','c'],max:19,attr:'© OpenRailwayMap, OpenStreetMap',z:7}
 };

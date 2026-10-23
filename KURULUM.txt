@@ -12,10 +12,10 @@ AZİMap hızlı kurulum
 Derleme ve API anahtarı gerekmez. index.html uygulama kodunu ve Türkiye/Aydın
 idari geometri verisini içerir. Harita altlıkları, adres arama, yükselti ve
 rota gibi bazı çevrim içi özellikler internet bağlantısı ister. Yerleşik
-OpenStreetMap, CARTO, OpenTopoMap ve Esri altlıkları için AZİMap API anahtarı
-gerekmez; özel bir servis adresi sağlayıcısının anahtarını isteyebilir. İlk
-yüklemeden sonra uygulama kabuğu önbellekten açılabilir; harita karoları ve
-çevrim içi özellikler için internet bağlantısı gerekir.
+OpenStreetMap, OpenTopoMap ve Esri altlıkları için AZİMap API anahtarı
+gerekmez; CARTO karo altlıkları kaldırılmıştır. Özel bir servis adresi
+kendi anahtarını isteyebilir. İlk yüklemeden sonra uygulama kabuğu
+önbellekten açılabilir; harita karoları ve çevrim içi özellikler için internet bağlantısı gerekir.
 
 Google Haritalar ve Yandex Haritalar düğmeleri konumu kendi web sayfalarında
 açar. Uygulama Google/Yandex karo servislerine doğrudan istek göndermez.

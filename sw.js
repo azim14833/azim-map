@@ -1,5 +1,5 @@
 'use strict';
-const CACHE = 'azimap-shell-v1';
+const CACHE = 'azimap-shell-v2';
 const SHELL = ['index.html', 'manifest.json', 'icon.svg'].map(path => new URL(path, self.registration.scope).href);
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).catch(() => {}));
