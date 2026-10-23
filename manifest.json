@@ -1,0 +1,14 @@
+{
+  "name": "AZİMap",
+  "short_name": "AZİMap",
+  "description": "Türkiye sınırları ve alan çizimi için çevrim içi harita uygulaması",
+  "lang": "tr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eef2f7",
+  "theme_color": "#0e2a47",
+  "icons": [
+    { "src": "./icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

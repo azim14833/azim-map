@@ -5,6 +5,10 @@
 <title>AZİMap</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0e2a47">
+<meta name="description" content="AZİMap — Türkiye sınırları, harita çizimi ve çevrimdışı kullanım">
+<link rel="manifest" href="./manifest.json">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon.svg">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
@@ -12,7 +16,7 @@
 :root{--navy:#0e2a47;--navy2:#16406b;--ink:#1b2733;--mut:#5d6d7e;--line:#dde4ec;--bg:#eef2f7;--card:#fff;--acc:#1e6fd9;--acc2:#16a085;--sig:#d9382b}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html,body{height:100%;margin:0}
+ html,body{height:100%;height:100dvh;margin:0}
 body{font:13px/1.45 "Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--navy);overflow:hidden}
 #app{display:flex;height:100%}
 #rail{width:70px;background:var(--navy);color:#9fb6cf;display:flex;flex-direction:column;align-items:center;padding:10px 0;flex-shrink:0}
@@ -250,9 +254,11 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
 #navpad .np-up{left:40px;top:3px}#navpad .np-dn{left:40px;bottom:3px}#navpad .np-lf{left:3px;top:40px}#navpad .np-rt{right:3px;top:40px}
 #navpad #npC{position:absolute;left:38px;top:38px;width:42px;height:42px;border-radius:50%;border:2px solid rgba(255,255,255,.55);background:rgba(30,111,217,.9);color:#fff;font-size:11px;font-weight:700;padding:0}
 #navpad #npC:hover{background:#2b83f0}
+#t1 .btns a{display:inline-block;padding:6px 11px;border:1px solid var(--acc);border-radius:6px;color:var(--acc);text-decoration:none;font-weight:600}
+#t1 .btns a:hover{background:#e8f1fd}
 .is3d #navpad{bottom:62px}
 #exProg{width:100%;height:10px;margin-top:6px}
-.dpiseg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+ .dpiseg{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .dpiseg button{padding:8px 0;font-weight:700}
 .dpiseg button.on{background:var(--acc);color:#fff}
 .fmtgroup{font-size:11px;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin:10px 0 4px}
@@ -273,8 +279,10 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
         <option value="natgeo">National Geographic (Esri)</option><option value="terrain">Arazi gölgeli (Esri)</option>
         <option value="esris">Sokak (Esri)</option><option value="osm">Sokak (OpenStreetMap)</option><option value="osmfr">Sokak (OSM Fransa)</option>
         <option value="cartovoy">Sokak – sade (CARTO)</option><option value="cartolight">Açık gri (CARTO)</option><option value="cartodark">Koyu / gece (CARTO)</option><option value="esridark">Koyu / gece (Esri)</option>
-        <option value="custom">Özel altlık (aşağıda)</option>
-      </select>
+         <option value="custom">Özel altlık (aşağıda)</option>
+       </select>
+       <div class="btns"><a id="googleMapLink" href="https://www.google.com/maps" target="_blank" rel="noopener noreferrer">Google Haritalar’da bu konumu aç ↗</a><a id="yandexMapLink" href="https://yandex.com/maps" target="_blank" rel="noopener noreferrer">Yandex Haritalar’da bu konumu aç ↗</a></div>
+       <p class="note">Dış bağlantılar konumu ilgili hizmette açar. Harita görsellerini uygulamaya eklemek için Google/Yandex API anahtarı ve sağlayıcı koşulları gerekir; bu nedenle doğrudan karo adresleri kullanılmaz.</p>
       <label class="chk"><input type="checkbox" id="ovRoads"> Yollar ve sokak adları</label>
       <label class="chk"><input type="checkbox" id="ovLabels"> Yer adları – sınır çizgisiz (CARTO)</label>
       <label class="chk"><input type="checkbox" id="ovPlaces"> Yer adları ve idari sınırlar (Esri, çizgili)</label>
@@ -295,7 +303,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
       <label>Saydamlık</label><input type="range" id="lyOp" min="0.1" max="1" step="0.05" value="1">
       <div class="btns"><button class="main" id="lyAdd">Katmanı ekle</button></div>
       <div id="lyList"></div>
-      <p class="note">Eklenen katmanlar altlığın üstüne bindirilir; yukarı oku sırayı değiştirir. Katmanlar PDF, SVG ve KMZ çıktısına da girer.</p></div></details>
+       <p class="note">Eklenen katmanlar altlığın üstüne bindirilir; yukarı oku sırayı değiştirir. Katmanlar PDF, SVG ve KMZ çıktısına da girer. Yerleşik OSM, CARTO, OpenTopoMap ve Esri altlıkları için AZİMap API anahtarı istemez; özel servis adresi kendi sağlayıcısının anahtarını gerektirebilir.</p></div></details>
 <details class="card "><summary>Özel altlık</summary><div class="cbody">
       <p class="note" style="margin-top:0">Elinizde bir harita servisi adresi varsa (örneğin kurumunuzun WMS adresi) buraya girin.</p>
       <label>Tür</label>
@@ -309,7 +317,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
       <div class="btns"><button class="main" id="cUse">Bu katmanı kullan</button></div>
     </div></details>
 <details class="card"><summary>Yakınlaştırma ve görünüm</summary><div class="cbody"><label>Yakınlaştırma hızı</label>
-      <select id="zmSpeed"><option value="slow">Yavaş ve yumuşak</option><option value="normal" selected>Normal</option><option value="fast">Hızlı</option></select>
+       <select id="zmSpeed"><option value="slow" selected>Yavaş ve yumuşak</option><option value="normal">Normal</option><option value="fast">Hızlı</option></select>
       <p class="note">Fare tekerleği veya iki parmakla yakınlaştırma kademeli ve akıcıdır. Sınırlar altlıktaki çizgilerle tutmuyorsa Yer adları – sınır çizgisiz seçeneğini ve Sınırlar sekmesindeki Sınır hizalama bölümünü kullanın.</p></div></details>
 <details class="card"><summary>Altlık durumu</summary><div class="cbody"><p class="note" style="margin-top:0">Her altlığın bu ağda çalışıp çalışmadığı otomatik sınanır. Çalışmayan bir altlık seçilirse yedeği gösterilir.</p><div id="probeList"></div><div class="btns"><button id="probeBtn">Altlıkları yeniden sına</button></div></div></details>
 </div>
@@ -499,8 +507,8 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
       <p class="note">Kırmızı çerçevenin içi indirilir. Haritayı kaydırıp yakınlaştırarak çerçeveye yerleştirin.</p></div></details>
 <details class="card" open><summary>3 · Çözünürlük ve ayrıntı</summary><div class="cbody"><div id="dpiOpts">
         <label>Çözünürlük (dpi)</label>
-        <div class="dpiseg"><button data-dpi="150">150</button><button data-dpi="300">300</button><button data-dpi="600">600</button><button data-dpi="1200">1200</button><button data-dpi="1800">1800</button><button data-dpi="2400">2400</button></div>
-        <select id="exDpi" hidden><option value="150">150 dpi</option><option value="300">300 dpi</option><option value="600">600 dpi</option><option value="1200">1200 dpi</option><option value="1800">1800 dpi</option><option value="2400" selected>2400 dpi</option></select>
+        <div class="dpiseg"><button data-dpi="600">600</button><button data-dpi="1200">1200</button><button data-dpi="1800">1800</button><button data-dpi="2400">2400</button></div>
+        <select id="exDpi" hidden><option value="600">600 dpi</option><option value="1200">1200 dpi</option><option value="1800">1800 dpi</option><option value="2400" selected>2400 dpi</option></select>
         <label>Altlık harita ayrıntısı (karo sayısı)</label>
         <select id="exDetail"><option value="normal">Normal (hızlı)</option><option value="high" selected>Yüksek</option><option value="ultra">Çok yüksek (yavaş, çok veri)</option></select>
         <p class="note">Yakınlaştırınca altlık pikselleniyorsa "Çok yüksek"i seçin veya alanı küçültün. Bilgi kutusu seçilebilecek en ince ayrıntıyı ve tahmini dosya boyutunu gösterir.</p>
@@ -508,7 +516,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
 <details class="card" open><summary>4 · Yazılar ve dolgu</summary><div class="cbody"><label>Sınır isimleri</label>
       <select id="exLabelMode"><option value="auto" selected>Akıllı: en ayrıntılı seviye (mahalle varsa il ve ilçe adı gizlenir)</option><option value="all">Hepsi (üst üste binenler elenir)</option><option value="none">Sınır isimleri yok</option></select>
       <label>Sınır dolgusu yoğunluğu: <span id="exFillVal">%100</span></label>
-      <input type="range" id="exFillScale" min="0" max="100" step="5" value="100">
+       <input type="range" id="exFillScale" min="0" max="100" step="5" value="40">
       <p class="note">Mahallelerin içindeki harita ayrıntısını görmek için dolgu yoğunluğunu düşürün (0 = yalnız çizgi). İsimler poligonun içine sığacak boyuta küçültülür; sığmayanlar yazılmaz.</p></div></details>
 <details class="card"><summary>5 · Başlık ve harita süsleri</summary><div class="cbody"><div id="furnOpts">
         <label>Başlık</label>
@@ -591,7 +599,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
       <label class="chk"><input type="checkbox" id="tmRemember"> Bu cihazda grup kodunu hatırla</label>
       <div class="btns"><button class="main" id="tmConn">Ekibe bağlan</button></div>
       <div class="msg" id="tmStat">Bağlı değil.</div>
-      <p class="note"><b>Güvenlik:</b> Konum ve mesajlar grup kodundan türetilen anahtarla cihazınızda şifrelenir (AES-GCM); özel mesajlar ayrıca kişiye özel anahtarla şifrelenir. Aracı sunucu içeriği okuyamaz, ancak kimin ne zaman bağlandığını görebilir. Genel aracılar herkese açıktır: hassas çalışmalarda kendi aktarıcınızı kullanın (paketteki server/relay.js). Kodu yalnızca ekibinizle paylaşın; kodu bilen herkes gruba girebilir.</p></div></details>
+       <p class="note"><b>Güvenlik:</b> Konum ve mesajlar grup kodundan türetilen anahtarla cihazınızda şifrelenir (AES-GCM); özel mesajlar ayrıca kişiye özel anahtarla şifrelenir. Aracı sunucu içeriği okuyamaz, ancak kimin ne zaman bağlandığını görebilir. Genel aracılar herkese açıktır: hassas çalışmalarda kendi güvenilir MQTT/WebSocket sunucunuzu kullanın. Kodu yalnızca ekibinizle paylaşın; kodu bilen herkes gruba girebilir.</p></div></details>
 <details class="card" open><summary>Konum paylaşımı</summary><div class="cbody"><label class="chk"><input type="checkbox" id="tmShare"> Konumumu ekiple canlı paylaş</label>
       <label>Gönderim sıklığı</label>
       <select id="tmInt"><option value="3">3 saniye</option><option value="5" selected>5 saniye</option><option value="10">10 saniye</option><option value="30">30 saniye</option></select>
@@ -639,6 +647,7 @@ hr{border:0;border-top:1px solid var(--line);margin:10px 0}
 <script>
 (function(){
 'use strict';
+if(!window.L||!window.L.Control||!window.L.Control.Draw){document.body.innerHTML='<main style="max-width:640px;margin:10vh auto;padding:24px;font:16px/1.5 Segoe UI,Arial;background:#fff;border-radius:12px;color:#183047"><h1>AZİMap yüklenemedi</h1><p>Harita bileşenleri internetten alınamadı. İnternet bağlantınızı kontrol edip sayfayı yenileyin. Uygulamayı GitHub Pages veya başka bir HTTPS adresinden açın.</p><p>Gömülü Türkiye ve Aydın sınırları için API anahtarı gerekmez; Google/Yandex bağlantıları ayrı harita sayfalarını açar.</p></main>';return;}
 var routePick=null;
 var imgMode=null;
 var kmlImgMode=null;
@@ -649,6 +658,8 @@ const sleep=()=>new Promise(r=>setTimeout(r,0));
 
 /* ================= Harita ================= */
 const map=L.map('map',{zoomSnap:0,zoomDelta:0.5,wheelPxPerZoomLevel:200,wheelDebounceTime:25,zoomAnimationThreshold:8,preferCanvas:false}).setView([38.96,35.24],6);
+function syncExternalMapLinks(){const c=map.getCenter(),z=Math.round(map.getZoom());const g=$('googleMapLink'),y=$('yandexMapLink');if(g)g.href=`https://www.google.com/maps/@${c.lat.toFixed(6)},${c.lng.toFixed(6)},${z}z`;if(y)y.href=`https://yandex.com/maps/?ll=${c.lng.toFixed(6)}%2C${c.lat.toFixed(6)}&z=${z}`;}
+map.on('moveend zoomend',syncExternalMapLinks);syncExternalMapLinks();
 map.createPane('adminPane');map.getPane('adminPane').style.zIndex=450;map.getPane('adminPane').style.pointerEvents='auto';
 map.createPane('drawPane');map.getPane('drawPane').style.zIndex=460;map.getPane('drawPane').style.pointerEvents='auto';
 L.control.scale({metric:true,imperial:false,position:'bottomleft'}).addTo(map);
@@ -710,7 +721,7 @@ const LCAT=[
   {n:'Esri açık gri taban (üstte, saydam)',url:ESRI+'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',sub:['a'],max:16,op:0.5},
   {n:'OpenTopoMap (saydam, çarpma)',url:OTMURL,sub:['a','b','c'],max:17,op:0.5,blend:'multiply'}
 ];
-const state={base:'esrii',ov:{shade:false,otm:false,hill:false,cont:false,roads:true,places:false,labels:true,trails:false,rail:false},layers:[],imgs:[],shift:{}};
+const state={base:'cartovoy',ov:{shade:false,otm:false,hill:false,cont:false,roads:true,places:false,labels:true,trails:false,rail:false},layers:[],imgs:[],shift:{}};
 let leaf=[],tileFail=0,tileOk=0;
 const isDarkBase=()=>['esrii','clarity','cartodark','esridark','custom'].includes(state.base);
 
@@ -1067,7 +1078,9 @@ function allItems(){
   return[...admin.getLayers().sort((a,b)=>(a._p.lvl||0)-(b._p.lvl||0)),...drawn.getLayers()];
 }
 function visItems(){return allItems().filter(l=>!l._p.hidden);}
-function reorderAdmin(){admin.getLayers().sort((a,b)=>(b._p.lvl||0)-(a._p.lvl||0)).forEach(l=>l.bringToBack());applyLevelVis();}
+ function localDistrictCoverage(){const expected=new Map(),loaded=new Map();(window.LOCAL_MAHALLE_AYDIN?.features||[]).forEach(f=>{const id=f.properties?.district_id;if(id)expected.set(id,(expected.get(id)||0)+1);});admin.getLayers().forEach(l=>{const id=l._p?.localMahalle&&l._p.districtId;if(id)loaded.set(id,(loaded.get(id)||0)+1);});return{expected,loaded};}
+ function syncAydinParentBoundaries(){const names=window.LOCAL_AYDIN_DISTRICTS||{},c=localDistrictCoverage();admin.getLayers().forEach(l=>{const p=l._p;if(!p||p.lvl!==6||!/^ayd[iı]n$/i.test(p.parent||''))return;const id=Object.keys(names).find(k=>names[k]===p.name),complete=!!id&&(c.expected.get(id)||0)>0&&(c.loaded.get(id)||0)>=(c.expected.get(id)||0);if(complete&&!p._localBoundaryMask){p._localBoundaryWasHidden=!!p.hidden;p._localBoundaryMask=true;p.hidden=true;restyle(l);}else if(!complete&&p._localBoundaryMask){p.hidden=!!p._localBoundaryWasHidden;delete p._localBoundaryWasHidden;delete p._localBoundaryMask;restyle(l);}});}
+ function reorderAdmin(){admin.getLayers().sort((a,b)=>(b._p.lvl||0)-(a._p.lvl||0)).forEach(l=>l.bringToBack());syncAydinParentBoundaries();applyLevelVis();}
 
 function hideCls(l){if(l._path)L.DomUtil[l._p.hidden?'addClass':'removeClass'](l._path,'hid');}
 function restyle(l){
@@ -1089,13 +1102,18 @@ function restyle(l){
   if(!p.hidden&&p.showLabel&&p.name&&map.getZoom()>=(p.minZ||0))l.bindTooltip(labelHtml(p),{permanent:true,direction:'center',className:'lbl',opacity:1});
 }
 function updTips(){
-  const z=map.getZoom();
-  admin.getLayers().forEach(l=>{
-    const p=l._p;if(!p.minZ)return;
-    const want=p.showLabel&&p.name&&!p.hidden&&z>=p.minZ,has=!!l.getTooltip();
-    if(want&&!has)l.bindTooltip(labelHtml(p),{permanent:true,direction:'center',className:'lbl',opacity:1});
-    else if(!want&&has)l.unbindTooltip();
+  const z=map.getZoom(),layers=admin.getLayers(),fb=map.getBounds(),mc=document.createElement('canvas').getContext('2d'),cands=[];let maxLvl=0;
+  layers.forEach(l=>{const p=l._p;if(!p||!p.showLabel||!p.name||p.hidden||z<(p.minZ||0))return;try{if(l.getBounds().intersects(fb))maxLvl=Math.max(maxLvl,p.lvl||0);}catch(e){}});
+  layers.forEach(l=>{
+    const p=l._p;if(!p)return;const want=p.showLabel&&p.name&&!p.hidden&&z>=(p.minZ||0)&&!(maxLvl>=8&&(p.lvl||0)<8);
+    if(!want||!(l instanceof L.Polygon)){if(l.getTooltip())l.unbindTooltip();return;}
+    let pos;try{pos=labelPos(l);}catch(e){}if(!pos){if(l.getTooltip())l.unbindTooltip();return;}
+    const a=map.latLngToContainerPoint(l.getBounds().getNorthWest()),b=map.latLngToContainerPoint(l.getBounds().getSouthEast()),bw=Math.abs(b.x-a.x),bh=Math.abs(b.y-a.y),pt=map.latLngToContainerPoint(pos),text=String(p.name).replace(/\n/g,' '),base=Math.max(9,Math.min(18,p.labelSize||14));
+    mc.font=`700 ${base}px "Segoe UI",Arial,sans-serif`;const natural=mc.measureText(text).width,fs=Math.min(base,(bw-6)/(natural/base||1),(bh-6)/1.35);if(fs<9||bw<14||bh<13){if(l.getTooltip())l.unbindTooltip();return;}
+    mc.font=`700 ${fs}px "Segoe UI",Arial,sans-serif`;const w=mc.measureText(text).width+fs*0.5,h=fs*1.35,area=bw*bh;cands.push({l,p,x:pt.x,y:pt.y,w,h,fs,area,lvl:p.lvl||0});
   });
+  cands.sort((a,b)=>b.lvl-a.lvl||b.area-a.area);const placed=[];
+  cands.forEach(c=>{const r=[c.x-c.w/2,c.y-c.h/2,c.x+c.w/2,c.y+c.h/2],over=placed.some(q=>r[0]<q[2]+2&&r[2]>q[0]-2&&r[1]<q[3]+2&&r[3]>q[1]-2);if(over){if(c.l.getTooltip())c.l.unbindTooltip();return;}placed.push(r);const html=labelHtml(Object.assign({},c.p,{labelSize:c.fs})),old=c.l.getTooltip();if(old&&old.getContent()!==html)c.l.unbindTooltip();if(!c.l.getTooltip())c.l.bindTooltip(html,{permanent:true,direction:'center',className:'lbl',opacity:1});});
 }
 map.on('zoomend',updTips);
 const headG=L.layerGroup().addTo(map);
@@ -1435,12 +1453,12 @@ function addRelations(data,checked){
     const sig=`${name}|${L.latLngBounds(outs.flat()).toBBoxString()}`;
     if(signatures.has(sig))continue; signatures.add(sig);
     const pg=L.polygon(polys.length===1?polys[0]:polys,Object.assign({},polyOpt));
-    const isNeighborhood=lvl>=8; setup(pg,{name:name,labelSize:isNeighborhood?15:(lvl===7?14:13),labelColor:isNeighborhood?'#ffffff':'#111111',stroke:isNeighborhood?'#00e5ff':st.stroke,weight:isNeighborhood?2.5:st.weight,fill:pal(admin.getLayers().length),fillOpacity:isNeighborhood?0.58:0.4,showLabel:checked,osm:rel.id,lvl:lvl,minZ:isNeighborhood?10:(lvl===7?9:lvl===6?8:6)},'admin');
+    const isNeighborhood=lvl>=8; setup(pg,{name:name,labelSize:isNeighborhood?15:(lvl===7?14:13),labelColor:isNeighborhood?'#ffffff':'#111111',stroke:isNeighborhood?'#00e5ff':st.stroke,weight:isNeighborhood?2.5:st.weight,fill:pal(admin.getLayers().length),fillOpacity:0.4,showLabel:checked,osm:rel.id,lvl:lvl,minZ:isNeighborhood?10:(lvl===7?9:lvl===6?8:6)},'admin');
     admin.addLayer(pg);
     pg.setStyle({color:isNeighborhood?'#00e5ff':st.stroke,weight:isNeighborhood?2.5:st.weight,fillColor:pg._p.fill,fillOpacity:pg._p.fillOpacity,opacity:1});
     added++;
   }
-  reorderAdmin();
+  reorderAdmin();updTips();
   return added;
 }
 function localGeometryLatLngs(g){
@@ -1448,20 +1466,17 @@ function localGeometryLatLngs(g){
   if(g.type==='MultiPolygon')return g.coordinates.map(p=>p.map(r=>r.map(q=>[q[1],q[0]])));
   return null;
 }
+const localBoundsCache=new Map();
+function localDistrictBounds(did){
+  if(localBoundsCache.has(did))return localBoundsCache.get(did);
+  const fs=(window.LOCAL_MAHALLE_AYDIN?.features||[]).filter(f=>f.properties?.district_id===did),pts=fs.flatMap(f=>localGeometryLatLngs(f.geometry)||[]).flat(2),b=pts.length?L.latLngBounds(pts):null;
+  localBoundsCache.set(did,b);return b;
+}
 function addLocalAydinNeighborhoods(){
   const data=window.LOCAL_MAHALLE_AYDIN;if(!data||!data.features)return 0;
-  const old=admin.getLayers().filter(l=>l._p&&l._p.localMahalle);old.forEach(l=>admin.removeLayer(l));
-  let n=0;
-  data.features.forEach((f,i)=>{
-    const ll=localGeometryLatLngs(f.geometry);if(!ll)return;
-    const p=f.properties||{},name=p.name||p.source_raw_name||'Mahalle '+(i+1);
-    const l=L.polygon(ll,Object.assign({},polyOpt));
-    setup(l,{name:name,labelSize:15,labelColor:'#ffffff',stroke:'#003b5c',weight:2.2,fill:pal(i),fillOpacity:0.68,showLabel:true,osm:'local-'+(p.id||i),localMahalle:true,districtId:p.district_id||'',provinceId:p.province_id||'TR-P-09',lvl:10,minZ:11},'admin');
-    admin.addLayer(l);l.setStyle({color:'#003b5c',weight:2.2,fillColor:l._p.fill,fillOpacity:.68,opacity:1});n++;
-  });
-  reorderAdmin();updTips();
-  if(n){const b=L.featureGroup(admin.getLayers().filter(l=>l._p&&l._p.localMahalle)).getBounds();if(b.isValid())map.fitBounds(b,{padding:[24,24],maxZoom:13});}
-  colorNeighborhoods(admin.getLayers().filter(l=>l._p&&l._p.localMahalle));
+  let n=0;Object.keys(window.LOCAL_AYDIN_DISTRICTS||{}).forEach(did=>{n+=addLocalDistrict(did).length;});
+  const local=admin.getLayers().filter(l=>l._p&&l._p.localMahalle);reorderAdmin();updTips();
+  if(local.length){const b=L.featureGroup(local).getBounds();if(b.isValid())map.fitBounds(b,{padding:[24,24],maxZoom:13});}
   return n;
 }
 async function fetchAdmin(){
@@ -1471,6 +1486,10 @@ async function fetchAdmin(){
   const mz=MINZ[lvl]||9;
   if(map.getZoom()<mz){st.textContent=`Bu seviye için haritaya daha fazla yakınlaşın (en az ${mz}. seviye, şu an ${map.getZoom()}).`;return;}
   const b=map.getBounds();
+  if(window.LOCAL_MAHALLE_AYDIN&&/^(10|8\|9\|10)$/.test(lvl)){
+    const ids=Object.keys(window.LOCAL_AYDIN_DISTRICTS||{}).filter(id=>{const db=localDistrictBounds(id);return db&&b.intersects(db);});
+    if(ids.length){$('admGet').disabled=true;try{let added=0;ids.forEach(id=>{added+=addLocalDistrict(id).length;});const layers=admin.getLayers().filter(l=>l._p?.localMahalle&&ids.includes(l._p.districtId));colorNeighborhoods(layers);st.textContent=added?`${added} Aydın mahalle/köy sınırı yerleşik veriyle eklendi. Aynı ilçenin farklı çevrim içi geometrileri kullanılmadı.`:`Bu alandaki Aydın mahalleleri zaten yerleşik geometriyle yüklü.`;autosave();}finally{$('admGet').disabled=false;}return;}
+  }
   const q=`[out:json][timeout:90];relation["boundary"="administrative"]["admin_level"~"^(${lvl})$"](${b.getSouth().toFixed(5)},${b.getWest().toFixed(5)},${b.getNorth().toFixed(5)},${b.getEast().toFixed(5)});out geom;`;
   $('admGet').disabled=true;
   try{
@@ -1500,6 +1519,11 @@ function provinceQueryNames(n){return [...new Set([n,OSM_PROVINCE_NAMES[n]||n])]
 async function fetchByName(){
   const st=$('stat'),nm=$('admName').value.trim().replace(/[^\p{L}\p{N}\s'\-]/gu,''),lvl=$('admLevel').value;
   if(!nm){st.textContent='Üst alanın adını yazın (örn. Efeler).';return;}
+  if(window.LOCAL_MAHALLE_AYDIN&&/^(7|10|8\|9\|10)$/.test(lvl)){
+    const foldLocal=s=>String(s||'').toLocaleLowerCase('tr').replace(/ı/g,'i').replace(/ş/g,'s').replace(/ğ/g,'g').replace(/ü/g,'u').replace(/ö/g,'o').replace(/ç/g,'c');
+    const districts=window.LOCAL_AYDIN_DISTRICTS||{},did=Object.keys(districts).find(k=>foldLocal(districts[k])===foldLocal(nm));
+    if(did){const added=addLocalDistrict(did),layers=admin.getLayers().filter(l=>l._p&&l._p.localMahalle&&l._p.districtId===did);if(layers.length){const b=L.featureGroup(layers).getBounds();if(b.isValid())map.fitBounds(b,{padding:[24,24],maxZoom:14});}st.textContent=added.length?`${added.length} yerleşik Aydın mahalle sınırı eklendi (${districts[did]}). Aynı adla gelen farklı OSM geometrileri bu seçimde kullanılmadı.`:`${districts[did]} mahalleleri zaten yüklü; yerleşik geometri kullanılıyor.`;autosave();return;}
+  }
   const D=window.TR_SINIR,norm=s=>s.toLocaleLowerCase('tr');
   if(D){
     const il=D.il.find(x=>norm(x.n)===norm(nm));
@@ -1542,7 +1566,7 @@ async function loadProvinceNeighborhoods(name){
 $('admByName').onclick=fetchByName;
 $('admColor').onclick=()=>{const n=colorNeighborhoods();if(!n)randColors();$('stat').textContent=n?n+' mahalle otomatik renklendirildi.':'Renklendirilecek mahalle bulunamadı.';};
 $('admClear').onclick=()=>{if(!admin.getLayers().length||!confirm('Tüm idari sınırlar silinsin mi?'))return;admin.clearLayers();if(sel&&sel._kind==='admin')select(null);autosave();};
-$('admLabels').onchange=e=>{admin.getLayers().forEach(l=>{l._p.showLabel=e.target.checked;restyle(l);});if(sel)renderPanel();autosave();};
+$('admLabels').onchange=e=>{admin.getLayers().forEach(l=>{l._p.showLabel=e.target.checked;restyle(l);});updTips();if(sel)renderPanel();autosave();};
 function adminSel(){
   const f=$('asLvl').value,set=f==='all'?null:f.split('|');
   return admin.getLayers().filter(l=>!set||set.includes(String(l._p.lvl)));
@@ -1559,7 +1583,7 @@ function applyAdminFill(){
 }
 function colorNeighborhoods(layers){
   const arr=(layers||admin.getLayers()).filter(l=>l&&l._p&&l._p.osm&&l._p.lvl>=8);
-  arr.forEach((l,i)=>{l._p.fill=pal(i+17);l._p.fillOpacity=0.68;l._p.hidden=false;l._p.showLabel=true;l._p.labelSize=Math.max(15,l._p.labelSize||15);l._p.weight=Math.max(2.5,l._p.weight||0);restyle(l);});
+  arr.forEach((l,i)=>{l._p.fill=pal(i+17);l._p.fillOpacity=0.4;l._p.hidden=false;l._p.showLabel=true;l._p.labelSize=Math.max(15,l._p.labelSize||15);l._p.weight=Math.max(2.5,l._p.weight||0);restyle(l);});
   if(arr.length)autosave();
   return arr.length;
 }
@@ -2030,7 +2054,8 @@ function updFrame0(){
   if(fmt==='jpgtiles'){const dpi=+$('exDpi').value,[pw,ph]=pageMM(),W=Math.round(pw/25.4*dpi),H=Math.round(ph/25.4*dpi),cols=Math.ceil(W/4096),rows=Math.ceil(H/4096);$('exInfo').textContent=`A0 ${dpi} DPI parçalı JPG: ${W} × ${H} mantıksal piksel, ${cols*rows} karo. ZIP içinde teslim edilir.`;return;}
   const [pw,ph]=pageMM(),dpi=+$('exDpi').value,W=Math.round(pw/25.4*dpi),H=Math.round(ph/25.4*dpi),mp=W*H/1e6,lim=fmt==='pdf'?350:268;
   let t=`Çıktı: ${W} × ${H} piksel (${mp.toFixed(0)} megapiksel)`;
-  if(mp>lim||(fmt!=='pdf'&&(W>32000||H>32000)))t+='\nBu boyut raster için fazla büyük (tarayıcı belleği yetmez). "PDF – vektör" veya SVG seçin.';
+  if(fmt==='pdf'&&W*H>100e6&&!window.showSaveFilePicker)t+='\nBu tarayıcı büyük PDF dosyasını diske akıtamıyor. 2400 dpi için "JPEG parçalı" seçeneğini kullanın; parçalar ZIP olarak iner.';
+  else if(mp>lim||(fmt!=='pdf'&&(W>32000||H>32000)))t+='\nBu boyut raster için fazla büyük (tarayıcı belleği yetmez). "PDF – vektör" veya SVG seçin.';
   else if(mp>150)t+='\nBüyük çıktı: hazırlanması birkaç dakika sürebilir.';
   $('exInfo').textContent=t;
 }
@@ -2517,11 +2542,17 @@ async function exportRaster(fmt){
   }
   /* PDF (resim) */
   const total0=W*H;
+  if(total0>100e6&&!window.showSaveFilePicker){
+    stat.textContent='Tarayıcı büyük PDF dosyasını doğrudan diske yazamıyor; 2400 dpi JPEG parçaları hazırlanıyor...';
+    await exportTiles('jpg',W,H,pw,dpi);
+    stat.textContent='Parçalı JPEG ZIP hazır. Bu tarayıcıda büyük raster PDF yerine 2400 dpi parçalı JPEG indirin veya PDF – vektör seçin.';
+    return;
+  }
   if(total0>1.5e9&&typeof confirm==='function'&&!confirm('Bu çıktı yaklaşık '+(total0/1e9).toFixed(1)+' gigapiksel; hazırlanması uzun sürer ve büyük dosya üretir. Devam edilsin mi?'))throw new Error('İşlem iptal edildi.');
   let fh=null,wr=null;
   if(window.showSaveFilePicker&&total0>100e6){
     try{fh=await window.showSaveFilePicker({suggestedName:'azimap_'+dpi+'dpi.pdf',types:[{description:'PDF',accept:{'application/pdf':['.pdf']}}]});wr=await fh.createWritable();}
-    catch(e){if(e&&e.name==='AbortError')throw new Error('İşlem iptal edildi.');fh=null;wr=null;}
+    catch(e){if(e&&e.name==='AbortError')throw new Error('İşlem iptal edildi.');stat.textContent='Tarayıcı büyük PDF dosyasını açamadı; parçalı JPEG ZIP hazırlanıyor...';await exportTiles('jpg',W,H,pw,dpi);stat.textContent='Parçalı JPEG ZIP hazır. Büyük raster PDF tarayıcıya yazılamadığı için parçalı JPEG kullanıldı.';return;}
   }
   const parts=[],sink=wr?{write:b=>wr.write(b)}:{write:async b=>{parts.push(b);}};
   const R=await prepare(W,H,{items:true,furniture:true,pw:pw,stream:true,cap:DETAIL_CAP.raster[detailKey()]});
@@ -2849,6 +2880,7 @@ function levelOff(l){
 }
 function applyLevelVis(){
   admin.getLayers().forEach(l=>{
+    if(l._p._localBoundaryMask){if(!l._p.hidden){l._p.hidden=true;restyle(l);}return;}
     const off=levelOff(l);
     if(off&&!l._p.hidden){l._p.hidden=true;l._p._lv=true;restyle(l);}
     else if(!off&&l._p._lv){l._p.hidden=false;delete l._p._lv;restyle(l);}
@@ -2863,14 +2895,19 @@ function localFeature(id){
 }
 function addLocalDistrict(did){
   const M=window.LOCAL_MAHALLE_AYDIN;if(!M||!M.features)return[];
+  const districtFeatures=M.features.filter(f=>(f.properties||{}).district_id===did);
+  const localNames=new Set(districtFeatures.map(f=>String((f.properties||{}).name||(f.properties||{}).source_raw_name||'').toLocaleLowerCase('tr')));
+  const allPts=districtFeatures.flatMap(f=>localGeometryLatLngs(f.geometry)||[]).flat(2);
+  const districtBounds=allPts.length?L.latLngBounds(allPts):null;
+  if(districtBounds)admin.getLayers().filter(l=>l._p&&!l._p.localMahalle&&l._p.lvl>=8&&districtBounds.contains(l.getBounds().getCenter())&&localNames.has(String(l._p.name||'').toLocaleLowerCase('tr'))).forEach(l=>admin.removeLayer(l));
   const have=new Set(admin.getLayers().filter(l=>l._p&&l._p.localMahalle).map(l=>l._p.osm)),added=[];
   M.features.forEach((f,i)=>{
     const p=f.properties||{};if(p.district_id!==did)return;
     const id='local-'+(p.id||i);if(have.has(id))return;
     const ll=localGeometryLatLngs(f.geometry);if(!ll)return;
     const l=L.polygon(ll,Object.assign({},polyOpt));
-    setup(l,{name:p.name||p.source_raw_name||'Mahalle '+(i+1),labelSize:15,labelColor:'#ffffff',stroke:'#003b5c',weight:2.2,fill:pal(i),fillOpacity:0.68,showLabel:true,osm:id,localMahalle:true,districtId:p.district_id||'',provinceId:p.province_id||'TR-P-09',lvl:10,minZ:11},'admin');
-    admin.addLayer(l);l.setStyle({color:'#003b5c',weight:2.2,fillColor:l._p.fill,fillOpacity:.68,opacity:1});added.push(l);
+    setup(l,{name:p.name||p.source_raw_name||'Mahalle '+(i+1),labelSize:15,labelColor:'#ffffff',stroke:'#003b5c',weight:2.2,fill:pal(i),fillOpacity:0.4,showLabel:true,osm:id,localMahalle:true,districtId:p.district_id||'',provinceId:p.province_id||'TR-P-09',lvl:10,minZ:10},'admin');
+    admin.addLayer(l);l.setStyle({color:'#003b5c',weight:2.2,fillColor:l._p.fill,fillOpacity:.4,opacity:1});added.push(l);
   });
   reorderAdmin();updTips();colorNeighborhoods(added);
   return added;
@@ -4460,9 +4497,9 @@ function padStep(d){
 function applyZoomSpeed(){
   const v=$('zmSpeed').value,m={slow:{w:360,d:0.25},normal:{w:200,d:0.5},fast:{w:90,d:1}}[v]||{w:200,d:0.5};
   map.options.wheelPxPerZoomLevel=m.w;map.options.zoomDelta=m.d;
-  try{localStorage.setItem('azimap_zoomspeed',v);}catch(e){}
+  try{localStorage.setItem('azimap_zoomspeed_v2',v);}catch(e){}
 }
-try{const z=localStorage.getItem('azimap_zoomspeed');if(z&&$('zmSpeed'))$('zmSpeed').value=z;}catch(e){}
+try{const z=localStorage.getItem('azimap_zoomspeed_v2');if(z&&$('zmSpeed'))$('zmSpeed').value=z;}catch(e){}
 $('zmSpeed').onchange=applyZoomSpeed;applyZoomSpeed();
 
 /* ================= Kısayollar, mobil çekmece, hash yönlendirme ================= */

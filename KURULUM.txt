@@ -1,0 +1,29 @@
+AZİMap hızlı kurulum
+====================
+
+1. ZIP'teki tüm dosyaları (index.html, manifest.json, sw.js, icon.svg,
+   README.md ve KURULUM.txt) bir HTTPS web alanına yükleyin. PWA dosyalarını
+   atlamayın; telefona yükleme ve uygulama kabuğu önbelleği bunlara bağlıdır.
+2. GitHub Pages için bu dosyaları deponun kök dizinine koyun. GitHub'da
+   Settings > Pages bölümünden dağıtımı açın ve yayınlanan site adresini kullanın.
+3. Siteyi telefonda HTTPS üzerinden açın. Android Chrome menüsünden
+   "Uygulamayı yükle"; iPhone Safari'de Paylaş > "Ana Ekrana Ekle" seçin.
+
+Derleme ve API anahtarı gerekmez. index.html uygulama kodunu ve Türkiye/Aydın
+idari geometri verisini içerir. Harita altlıkları, adres arama, yükselti ve
+rota gibi bazı çevrim içi özellikler internet bağlantısı ister. Yerleşik
+OpenStreetMap, CARTO, OpenTopoMap ve Esri altlıkları için AZİMap API anahtarı
+gerekmez; özel bir servis adresi sağlayıcısının anahtarını isteyebilir. İlk
+yüklemeden sonra uygulama kabuğu önbellekten açılabilir; harita karoları ve
+çevrim içi özellikler için internet bağlantısı gerekir.
+
+Google Haritalar ve Yandex Haritalar düğmeleri konumu kendi web sayfalarında
+açar. Uygulama Google/Yandex karo servislerine doğrudan istek göndermez.
+
+Aydın'da mahalle düzeyinde sınırları Sınırlar sekmesinde ilçe adıyla arayın.
+Yerleşik Aydın verisi kullanılır. Diğer bölgelerde yerleşim sınırları çevrim
+içi veriye bağlıdır; veri yoksa GeoJSON dosyası içe aktarılabilir.
+
+Baskı/resim indirmede 600, 1200, 1800 ve 2400 dpi seçilebilir. 2400 dpi büyük
+raster PDF bazı tarayıcılarda doğrudan indirilemez; bu durumda parçalı JPEG
+ZIP veya her ölçekte keskin olan PDF – vektör seçeneğini kullanın.
