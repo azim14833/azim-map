@@ -547,6 +547,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
 <div class="dsChks"><label><input type="checkbox" id="pkLv4" checked> İl</label><label><input type="checkbox" id="pkLv6" checked> İlçe</label><label><input type="checkbox" id="pkLv10" checked> Mahalle/köy</label><label><input type="checkbox" id="pkLvD" checked> Çizimlerim</label></div>
 <div class="dsNum"><label>Seçme mesafesi (px)</label><input type="number" id="pkTol" value="14" min="4" max="40"></div>
 <div class="dsNum"><label>Birleştirme mesafesi (px)</label><input type="number" id="pkMerge" value="40" min="5" max="200"></div>
+<div class="dsNum"><label>En büyük boşluk (px): bu kadar uzaktaki boşluklar da kapanır</label><input type="number" id="pkGap" value="160" min="10" max="800" step="10"></div>
 <label class="chk"><input type="checkbox" id="pkChain"> Birleştirme modu: ilk seçtiğim sınır sabit kalır, sonra tıkladıklarım ona birleşir</label>
 <label class="chk"><input type="checkbox" id="pkRef"> Gerçek (OSM) sınırları referans olarak çiz: zoom değişse de aynı kalır, çizgiler ona yapışır</label>
 <div class="btns"><button id="pkBase">Sınırsız altlık (uydu)</button><button id="pkList">Bu noktadaki sınırlar</button></div>
@@ -727,7 +728,16 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
 <details class="card" open><summary>Kayıtlı sınırlarım</summary><div class="cbody">
 <p class="note" style="margin-top:0">Çizdiğin sınırlar il/ilçe/mahalle olarak kaydedilir. “Hepsini ekle” veya “Tüm illeri/ilçeleri ekle” dediğinde, o seviyede kayıtlı sınırların varsa resmî sınır yerine <b>senin çizdiğin</b> açılır.</p>
 <div class="btns"><button class="main" id="ubAll">Hepsini haritaya getir</button><button id="ubSel">Seçili sınırı kayda ekle</button></div>
-<div id="ubList"></div><div class="msg" id="ubMsg"></div></div></details></div>
+<div id="ubList"></div><div class="msg" id="ubMsg"></div></div></details>
+<details class="card" open><summary>Güncel harita (OSM) ve hatasız sınır</summary><div class="cbody">
+<p class="note" style="margin-top:0">Sokak haritası (OpenStreetMap) sürekli güncellenen sınırlar içerir. Seçili ilin il, ilçe ve mahalle sınırlarını doğrudan o haritadan çekip renkli çizgiyle çizebilirsin: <b style="color:#d500f9">il mor</b>, <b style="color:#ff6d00">ilçe turuncu</b>, <b style="color:#00acc1">mahalle turkuaz</b>. Veri internetten gelir; işlem birkaç dakika sürebilir.</p>
+<div class="row"><div><label>İl</label><select id="osmIl"></select></div></div>
+<div class="dsChks"><label><input type="checkbox" id="osmIlce" checked> İlçeler</label><label><input type="checkbox" id="osmMah" checked> Mahalleler</label></div>
+<div class="btns"><button class="main" id="osmDrawBtn">🗺 OSM sokak haritasından çiz</button><button id="osmStop">Durdur</button></div>
+<div class="btns"><button id="refOnBtn">Güncel sınır haritasını göster/gizle</button><button id="lvColBtn">Sınır renklerini seviyeye göre ayarla</button></div>
+<div class="btns"><button id="auditBtn">Sınırları denetle</button><button class="main" id="repairBtn">Boşluk ve kaymaları onar</button></div>
+<div class="msg" id="osmMsg"></div><div class="msg" id="auditMsg"></div>
+<p class="note">“Denetle”, komşu sınırlar arasındaki boşluk/çakışmaları ve mahalle→ilçe→il uyumsuzluklarını sayar. “Onar”, bunları “Birleştirme mesafesi (m)” içinde tek çizgiye indirir. Hiçbir kaynak %100 doğru değildir (resmî sınır ile OSM farklı olabilir); bu araçlar sınırların tutarlı ve boşluksuz olmasını sağlar.</p></div></details></div>
 <div class="tab" id="t9"><details class="card" open><summary>Seç ve renklendir</summary><div class="cbody">
 <p class="note" style="margin-top:0"><b>1)</b> “Haritadan seç”i aç ve renklendireceğin il/ilçe/mahallelere tıkla (tekrar tıklarsan seçimden çıkar). <b>2)</b> Rengi ve yoğunluğu seç. <b>3)</b> “Seçilenleri boya”ya bas. Sınırlar çizgi olarak kalır; renk yalnızca boyadıklarına gelir.</p>
 <div class="btns"><button class="main" id="csOn">☝ Haritadan seç</button><button id="csClear">Seçimi temizle</button></div>
@@ -1249,7 +1259,7 @@ function drawSym(ctx,key,cx,cy,sz){
   ctx.fillText(d.t,17,d.s==='tr'?25:d.t.length===1?18.5:17.5);
   ctx.restore();
 }
-const LV={2:{stroke:'#ffd166',weight:4},4:{stroke:'#ffe08a',weight:3},6:{stroke:'#ffffff',weight:2.5},7:{stroke:'#bfe3ff',weight:2},8:{stroke:'#8be9fd',weight:1.6},9:{stroke:'#8be9fd',weight:1.6},10:{stroke:'#8be9fd',weight:1.6}};
+const LV={2:{stroke:'#ffd166',weight:4},4:{stroke:'#d500f9',weight:3.2},6:{stroke:'#ff6d00',weight:2.6},7:{stroke:'#ff9800',weight:2},8:{stroke:'#00acc1',weight:1.6},9:{stroke:'#00acc1',weight:1.6},10:{stroke:'#00acc1',weight:1.6}};
 let sel=null,busy=0,textMode=false,symMode=null,ringMode=null;
 const paint={on:false,color:'#e53935',op:0.55,erase:false};
 
@@ -1761,7 +1771,84 @@ async function loadProvinceNeighborhoods(name){
   await fetchByName();
   return true;
 }
+
 $('admByName').onclick=fetchByName;
+/* ===== OSM sokak haritasından il/ilçe/mahalle çiz ===== */
+const OSMD={busy:false,cancel:false};
+const OSM_STY={4:{stroke:'#d500f9',weight:3.2},6:{stroke:'#ff6d00',weight:2.6},10:{stroke:'#00acc1',weight:1.6}};
+function osmMsg(t){const e=$('osmMsg');if(e)e.textContent=t;}
+function osmRings(rel){
+  const outer=[],inner=[];
+  (rel.members||[]).forEach(m=>{if(m.type!=='way'||!m.geometry)return;const g=m.geometry.map(q=>[q.lat,q.lon]);(m.role==='inner'?inner:outer).push(g);});
+  const outs=joinWays(outer).filter(r=>r.length>3).sort((a,b)=>bboxArea(b)-bboxArea(a));
+  if(!outs.length)return null;
+  const polys=outs.map(o=>[o]);
+  joinWays(inner).filter(r=>r.length>3).forEach(i=>{const t=polys.find(pl=>pip(i[0],pl[0]));if(t)t.push(i);});
+  return polys;
+}
+function osmBuild(rel,lvl,ctx){
+  if(admin.getLayers().some(l=>l._p&&l._p.osm===rel.id&&l._p.src==='osmdraw'))return null;
+  const polys=osmRings(rel);if(!polys)return null;
+  const tags=rel.tags||{},name=tags['name:tr']||tags.name||tags.official_name||'',st=OSM_STY[lvl]||OSM_STY[10];
+  const pg=L.polygon(polys.length===1?polys[0]:polys,Object.assign({},polyOpt));
+  setup(pg,{name:name,labelSize:lvl===10?14:13,labelColor:'#111111',stroke:st.stroke,weight:st.weight,fill:'#888888',fillOpacity:0,showLabel:true,osm:rel.id,lvl:lvl,src:'osmdraw',ilName:ctx.il,parent:ctx.parent||'',minZ:lvl===10?11:lvl===6?9:5},'admin');
+  admin.addLayer(pg);pg.setStyle({color:st.stroke,weight:st.weight,fillOpacity:0,opacity:1});
+  return pg;
+}
+async function osmDrawAll(){
+  if(OSMD.busy)return;
+  const il=$('osmIl').value;if(!il){osmMsg('Önce il seç.');return;}
+  OSMD.busy=true;OSMD.cancel=false;$('osmDrawBtn').disabled=true;
+  const names=provinceQueryNames(il),say=osmMsg,added=[];
+  try{
+    if(state.base!=='osm'){state.base='osm';applyLayers();}
+    admin.getLayers().filter(l=>l._p&&l._p.src==='osmdraw'&&l._p.ilName===il&&!l._p.edited).forEach(l=>{if(sel===l)select(null);admin.removeLayer(l);});
+    say('İl sınırı alınıyor…');
+    const dIl=await overpass(`[out:json][timeout:120];rel["boundary"="administrative"]["admin_level"="4"]["name"~"^(${names})$",i];out geom;`,say);
+    const ilRel=(dIl.elements||[]).filter(e=>e.type==='relation'&&e.members).sort((a,b)=>b.members.length-a.members.length)[0];
+    if(!ilRel)throw new Error('İl sınırı OpenStreetMap’te bulunamadı.');
+    const ilLay=osmBuild(ilRel,4,{il:il,parent:''});if(ilLay)added.push(ilLay);
+    let ilceRels=[];
+    if(!OSMD.cancel&&($('osmIlce').checked||$('osmMah').checked)){
+      say('İlçe sınırları alınıyor…');
+      const dIlce=await overpass(`[out:json][timeout:180];rel["boundary"="administrative"]["admin_level"="4"]["name"~"^(${names})$",i]->.p;.p map_to_area->.a;rel(area.a)["boundary"="administrative"]["admin_level"~"^(6|7)$"];out geom;`,say);
+      ilceRels=(dIlce.elements||[]).filter(e=>e.type==='relation'&&e.members);
+      if($('osmIlce').checked)ilceRels.forEach(r=>{const l=osmBuild(r,6,{il:il,parent:il});if(l)added.push(l);});
+      reorderAdmin();updTips();
+    }
+    let mahN=0,fail=0;
+    if(!OSMD.cancel&&$('osmMah').checked){
+      let k=0;
+      for(const ir of ilceRels){
+        if(OSMD.cancel)break;k++;
+        const inm=(ir.tags&&(ir.tags['name:tr']||ir.tags.name))||'ilçe';
+        say(`Mahalleler alınıyor: ${inm} (${k}/${ilceRels.length})…`);
+        try{
+          const d=await overpass(`[out:json][timeout:180];rel(${ir.id});map_to_area->.a;rel(area.a)["boundary"="administrative"]["admin_level"~"^(8|9|10)$"];out geom;`,t=>say(`${inm} (${k}/${ilceRels.length}): ${t}`));
+          (d.elements||[]).filter(e=>e.type==='relation'&&e.members).forEach(r=>{const l=osmBuild(r,10,{il:il,parent:inm});if(l){added.push(l);mahN++;}});
+        }catch(e){fail++;console.warn(e);}
+        reorderAdmin();updTips();
+      }
+    }
+    if(!added.length)throw new Error('Yeni sınır eklenmedi (zaten çizili olabilir).');
+    say(`${added.length} sınır çizildi (${mahN} mahalle). Boşluklar kapatılıyor ve hiyerarşi birleştiriliyor…`);
+    const tolM=parseFloat($('bdTol').value)||40,vt=Math.min(parseFloat($('bdVtol').value)||25,15);
+    try{await window.__unify(true,added,{tolM:tolM,vtol:vt});}catch(e){console.warn(e);}
+    let fixedPairs=0;
+    try{const g=await window.__closeGaps(added,Math.min(tolM,30),Math.max(tolM*1.5,50),say);fixedPairs=g.fixed;g.touched.forEach(l=>{if(l._p)l._p.edited=true;});}catch(e){console.warn(e);}
+    const au=window.__audit(added,tolM);
+    try{const f=L.featureGroup(added);map.fitBounds(f.getBounds(),{padding:[30,30]});}catch(e){}
+    autosave();
+    const rp=$('pkRef');
+    osmMsg((OSMD.cancel?'Durduruldu. ':'')+`${added.length} sınır OSM sokak haritasından çizildi (il mor, ilçe turuncu, mahalle turkuaz). ${fixedPairs} komşu çifti birleştirildi. Denetim: ${au.near} köşede boşluk/çakışma, ${au.hier} köşede hiyerarşi uyumsuzluğu kaldı.`+(fail?` ${fail} ilçenin mahalleleri alınamadı (internet/sunucu); tekrar dene.`:''));
+  }catch(e){
+    osmMsg('OSM sınırları alınamadı: '+String(e.message).split('\n')[0]);
+  }
+  OSMD.busy=false;$('osmDrawBtn').disabled=false;
+}
+$('osmDrawBtn').onclick=osmDrawAll;
+$('osmStop').onclick=()=>{OSMD.cancel=true;osmMsg('Durduruluyor…');};
+
 $('admAydin').onclick=()=>{
   let n=0;try{n=addLocalAydinNeighborhoods('Aydın');}catch(e){console.error(e);}
   $('stat').textContent=n?n+' Aydın mahallesi eklendi. Bir alana tıklayıp rengini ve adını değiştirebilirsiniz.':'Aydın mahalle verisi bulunamadı ya da hepsi zaten haritada.';
@@ -6613,96 +6700,284 @@ window.__atlas={TM:TM,tmConnect:tmConnect,tmDisconnect:tmDisconnect,tmSend:tmSen
     pkMsg(hs.length?'Harita ortasındaki sınırlar: '+hs.map(h=>lvName(h.l)+' '+(h.l._p.name||'adsız')).join(' · '):'Harita ortasında sınır çizgisi yok; çizgiyi ortaya getir.');
   };
 
-  /* ---- Shift: 2. sınırı 1. sınıra birleştir (1. hareket etmez) ---- */
-  function mergeToAnchor(A,B){
-    if(A===B)return;
-    const mpp=mppNow(),tolM=Math.max(3,Math.min(400,(parseFloat($('pkMerge').value)||40)*mpp)),ky=110574;
-    const bbB=B.getBounds(),padDeg=tolM*1.5/110574;
-    const bb=L.latLngBounds([bbB.getSouth()-padDeg,bbB.getWest()-padDeg],[bbB.getNorth()+padDeg,bbB.getEast()+padDeg]);
-    const cell=Math.max(tolM*2,20)/111320,grid=new Map(),gk=(x,y)=>x+','+y,cx0=Math.floor(bb.getWest()/cell),cx1=Math.floor(bb.getEast()/cell),cy0=Math.floor(bb.getSouth()/cell),cy1=Math.floor(bb.getNorth()/cell);
+  /* ---- Shift: 2. sınırı 1. sınıra boşluksuz birleştir (1. hareket etmez) ---- */
+  /* ---- 2. sınırı 1. sınıra boşluksuz birleştir (kesit değiştirme) ---- */
+  function conformStretches(A,B,tolM,gapM,others,linkOn){
+    const ky=110574,lat0=B.getBounds().getCenter().lat,kx=Math.cos(lat0*Math.PI/180)*111320;
     const closedA=A instanceof L.Polygon;
-    ringsOf(A).forEach(r=>{
-      const n=r.length,m=closedA?n:n-1;
-      for(let i=0;i<m;i++){
-        const a=r[i],b=r[(i+1)%n];
-        if(Math.max(a.lat,b.lat)<bb.getSouth()||Math.min(a.lat,b.lat)>bb.getNorth()||Math.max(a.lng,b.lng)<bb.getWest()||Math.min(a.lng,b.lng)>bb.getEast())continue;
-        const x0=Math.max(cx0,Math.floor(Math.min(a.lng,b.lng)/cell)),x1=Math.min(cx1,Math.floor(Math.max(a.lng,b.lng)/cell)),y0=Math.max(cy0,Math.floor(Math.min(a.lat,b.lat)/cell)),y1=Math.min(cy1,Math.floor(Math.max(a.lat,b.lat)/cell));
-        if((x1-x0+1)*(y1-y0+1)>4000)continue;
-        const sg={r:r,i:i,a:a,b:b};
-        for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const kk=gk(x,y);let L2=grid.get(kk);if(!L2)grid.set(kk,L2=[]);L2.push(sg);}
+    const Ar=ringsOf(A).map(r=>{
+      const n=r.length,cum=[0];
+      for(let i=0;i<n;i++){const a=r[i],b=r[(i+1)%n];cum.push(cum[i]+((closedA||i<n-1)?Math.hypot((b.lng-a.lng)*kx,(b.lat-a.lat)*ky):0));}
+      return{r:r,n:n,cum:cum,L:cum[n],closed:closedA};
+    });
+    const cell=Math.max(gapM*1.1,40),grid=new Map(),gk=(x,y)=>x+','+y;
+    Ar.forEach((R,ri)=>{
+      for(let i=0;i<R.n;i++){
+        if(!R.closed&&i===R.n-1)break;
+        const a=R.r[i],b=R.r[(i+1)%R.n],ax=a.lng*kx,ay=a.lat*ky,bx=b.lng*kx,by=b.lat*ky;
+        const x0=Math.floor(Math.min(ax,bx)/cell),x1=Math.floor(Math.max(ax,bx)/cell),y0=Math.floor(Math.min(ay,by)/cell),y1=Math.floor(Math.max(ay,by)/cell);
+        if((x1-x0+1)*(y1-y0+1)>6000)continue;
+        const sg={ri:ri,i:i,ax:ax,ay:ay,bx:bx,by:by};
+        for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const k=gk(x,y);let l=grid.get(k);if(!l)grid.set(k,l=[]);l.push(sg);}
       }
     });
-    if(!grid.size){toast('Bu iki sınır birbirine yakın değil. “Birleştirme mesafesi”ni artır veya yakınlaş.',6000);return;}
-    const vmap=new Map();
-    ringsOf(B).forEach(r=>r.forEach(p=>{const k=keyOf(p);let a=vmap.get(k);if(!a)vmap.set(k,a=[]);a.push(p);}));
-    const others=[];
-    admin.eachLayer(o=>{if(o!==A&&o!==B&&o instanceof L.Polygon&&o.getBounds().intersects(bbB))others.push(o);});
-    drawn.eachLayer(o=>{if(o!==A&&o!==B&&isVec(o)&&o.getBounds().intersects(bbB))others.push(o);});
-    const omap=new Map();
-    if($('dsLink').checked)others.forEach(o=>ringsOf(o).forEach(r=>r.forEach(p=>{const k=keyOf(p);let a=omap.get(k);if(!a)omap.set(k,a=[]);a.push({o:o,p:p});})));
-    /* 1) plan (hiçbir şey değişmeden) */
-    const plan=[],touched=new Set();
-    vmap.forEach((list,key)=>{
-      const p0=list[0],kx=Math.cos(p0.lat*Math.PI/180)*111320,cx=Math.floor(p0.lng/cell),cy=Math.floor(p0.lat/cell),seen=new Set();
-      let best=null,bd=tolM*tolM;
+    if(!grid.size)return{changed:false,reason:'A boş'};
+    function nearest(p){
+      const px=p.lng*kx,py=p.lat*ky,cx=Math.floor(px/cell),cy=Math.floor(py/cell),seen=new Set();
+      let best=null,bd=gapM*gapM;
       for(let x=cx-1;x<=cx+1;x++)for(let y=cy-1;y<=cy+1;y++){
-        const L2=grid.get(gk(x,y));if(!L2)continue;
-        for(const sg of L2){
+        const l=grid.get(gk(x,y));if(!l)continue;
+        for(const sg of l){
           if(seen.has(sg))continue;seen.add(sg);
-          const ax=(sg.a.lng-p0.lng)*kx,ay=(sg.a.lat-p0.lat)*ky,bx=(sg.b.lng-p0.lng)*kx,by=(sg.b.lat-p0.lat)*ky,dx=bx-ax,dy=by-ay,d2=dx*dx+dy*dy;
-          let u=d2?((-ax)*dx+(-ay)*dy)/d2:0;u=Math.max(0,Math.min(1,u));
-          const qx=ax+u*dx,qy=ay+u*dy,dd=qx*qx+qy*qy;
-          if(dd<bd){bd=dd;best={sg:sg,u:u,len:Math.sqrt(d2),qx:qx,qy:qy};}
+          const dx=sg.bx-sg.ax,dy=sg.by-sg.ay,d2=dx*dx+dy*dy;
+          let u=d2?((px-sg.ax)*dx+(py-sg.ay)*dy)/d2:0;u=u<0?0:u>1?1:u;
+          const qx=sg.ax+u*dx,qy=sg.ay+u*dy,dd=(px-qx)*(px-qx)+(py-qy)*(py-qy);
+          if(dd<bd){bd=dd;best={sg:sg,u:u,qx:qx,qy:qy,len:Math.sqrt(d2)};}
         }
       }
-      if(!best)return;
-      let lat,lng,ins=false;const sg=best.sg;
-      if(best.u*best.len<0.5){lat=sg.a.lat;lng=sg.a.lng;}
-      else if((1-best.u)*best.len<0.5){lat=sg.b.lat;lng=sg.b.lng;}
-      else{lat=p0.lat+best.qy/ky;lng=p0.lng+best.qx/kx;ins=true;}
-      plan.push({list:list,key:key,lat:lat,lng:lng,ins:ins,sg:sg,u:best.u});
-      (omap.get(key)||[]).forEach(x=>touched.add(x.o));
-    });
-    if(!plan.length){toast('Seçilen iki sınır arasında '+Math.round(tolM)+' m içinde yakın çizgi bulunamadı. Birleştirme mesafesini artır.',6000);return;}
-    pushU([A,B].concat([...touched]));
-    /* 2) uygula: yalnızca B (ve ona bağlı komşular) hareket eder; A sadece ortak köşe alır (şekli değişmez) */
-    const dirty=new Set([B]);let moved=0,inserted=0,followed=0;
-    const insMap=new Map();
-    plan.forEach(pl=>{
-      pl.list.forEach(p=>{p.lat=pl.lat;p.lng=pl.lng;});moved++;
-      (omap.get(pl.key)||[]).forEach(x=>{x.p.lat=pl.lat;x.p.lng=pl.lng;dirty.add(x.o);});
-      if(pl.ins){let a=insMap.get(pl.sg.r);if(!a)insMap.set(pl.sg.r,a=[]);a.push({i:pl.sg.i,u:pl.u,lat:pl.lat,lng:pl.lng});}
-    });
-    insMap.forEach((arr,r)=>{
-      arr.sort((a,b)=>b.i-a.i||b.u-a.u);let last=null;
-      arr.forEach(e=>{if(last&&last.i===e.i&&Math.abs(last.lat-e.lat)<1e-7&&Math.abs(last.lng-e.lng)<1e-7)return;r.splice(e.i+1,0,L.latLng(e.lat,e.lng));inserted++;last=e;});
-    });
-    if(inserted)dirty.add(A);
-    /* 3) B'nin kenarları A'nın kıvrımlarını izlesin */
-    const cm=new Map();
-    ringsOf(A).forEach(r=>r.forEach((p,i)=>{const kk=keyOf(p);let a=cm.get(kk);if(!a)cm.set(kk,a=[]);a.push({r:r,i:i});}));
-    ringsOf(B).forEach(r=>{
-      const n=r.length;if(n<3)return;const out=[];let add=0;
-      for(let i=0;i<n;i++){
-        const a=r[i],b=r[(i+1)%n];out.push(a);
-        const ca=cm.get(keyOf(a)),cb=cm.get(keyOf(b));if(!ca||!cb)continue;
-        let mid=null;
-        for(const x of ca){const y=cb.find(z=>z.r===x.r);if(!y||x.i===y.i)continue;mid=coarsePath(x.r,x.i,y.i,a,b,tolM);if(mid)break;}
-        if(mid&&mid.length){mid.forEach(v=>out.push(L.latLng(v.lat,v.lng)));add+=mid.length;}
+      if(!best)return null;
+      const R=Ar[best.sg.ri];let vtx=null,s;
+      if(best.u*best.len<=0.3){vtx=best.sg.i;s=R.cum[vtx];}
+      else if((1-best.u)*best.len<=0.3){vtx=(best.sg.i+1)%R.n;s=R.cum[vtx];}
+      else s=R.cum[best.sg.i]+best.u*best.len;
+      return{d:Math.sqrt(bd),ri:best.sg.ri,i:best.sg.i,u:best.u,s:s,qx:best.qx,qy:best.qy,vtx:vtx};
+    }
+    function pathsOf(R,s1,s2){
+      const n=R.n,L2=R.L,cum=R.cum,out=[];
+      if(!R.closed){
+        if(s2>=s1){const v=[];for(let k=0;k<n;k++)if(cum[k]>s1+1e-6&&cum[k]<s2-1e-6)v.push(R.r[k]);out.push({len:s2-s1,verts:v});}
+        else{const v=[];for(let k=n-1;k>=0;k--)if(cum[k]<s1-1e-6&&cum[k]>s2+1e-6)v.push(R.r[k]);out.push({len:s1-s2,verts:v});}
+        return out;
       }
-      if(add){r.length=0;out.forEach(v=>r.push(v));followed+=add;}
+      const f=((s2-s1)%L2+L2)%L2,bk=L2-f;
+      const fv=[],bv=[];
+      for(let k=0;k<n;k++){
+        const d1=((cum[k]-s1)%L2+L2)%L2,d2=((s1-cum[k])%L2+L2)%L2;
+        if(d1>1e-6&&d1<f-1e-6)fv.push([d1,R.r[k]]);
+        if(d2>1e-6&&d2<bk-1e-6)bv.push([d2,R.r[k]]);
+      }
+      fv.sort((a,b)=>a[0]-b[0]);bv.sort((a,b)=>a[0]-b[0]);
+      out.push({len:f,verts:fv.map(x=>x[1])});out.push({len:bk,verts:bv.map(x=>x[1])});
+      return out;
+    }
+    const dm=(a,b)=>Math.hypot((a.lng-b.lng)*kx,(a.lat-b.lat)*ky);
+    function distToPoly(p,poly){
+      let best=1e18;const px=p.lng*kx,py=p.lat*ky;
+      for(let i=0;i<poly.length-1;i++){
+        const ax=poly[i].lng*kx,ay=poly[i].lat*ky,bx=poly[i+1].lng*kx,by=poly[i+1].lat*ky,dx=bx-ax,dy=by-ay,d2=dx*dx+dy*dy;
+        let u=d2?((px-ax)*dx+(py-ay)*dy)/d2:0;u=u<0?0:u>1?1:u;
+        const d=Math.hypot(px-(ax+u*dx),py-(ay+u*dy));if(d<best)best=d;
+      }
+      return best;
+    }
+    const insReq=new Map(),reps=[];let nSnap=0,nStretch=0,nRemoved=0,meaningful=false;
+    const newRings=[];
+    ringsOf(B).forEach(rb=>{
+      const n=rb.length;if(n<3){newRings.push(null);return;}
+      const pr=rb.map(p=>nearest(p)),near=pr.map(x=>!!(x&&x.d<=gapM)),an=[];
+      near.forEach((v,k)=>{if(v)an.push(k);});
+      if(an.length<2){newRings.push(null);return;}
+      const pos=k=>{const q=pr[k],R=Ar[q.ri];
+        if(q.vtx!=null)return{lat:R.r[q.vtx].lat,lng:R.r[q.vtx].lng,ins:null};
+        return{lat:q.qy/ky,lng:q.qx/kx,ins:{ri:q.ri,i:q.i,u:q.u}};};
+      const P={};an.forEach(k=>{P[k]=pos(k);if(dm(rb[k],P[k])>0.05)meaningful=true;});
+      const out=[];
+      for(let t=0;t<an.length;t++){
+        const i=an[t],j=an[(t+1)%an.length];
+        out.push(P[i]);
+        const inter=[];for(let k=(i+1)%n;k!==j;k=(k+1)%n){inter.push(k);if(inter.length>n)break;}
+        let rep=null;
+        if(pr[i].ri===pr[j].ri){
+          const R=Ar[pr[i].ri];
+          let lenB=0,prev=rb[i];inter.forEach(k=>{lenB+=dm(prev,rb[k]);prev=rb[k];});lenB+=dm(prev,rb[j]);
+          const cands=pathsOf(R,pr[i].s,pr[j].s);
+          let best=null;
+          cands.forEach(c=>{
+            const e=Math.abs(c.len-lenB);
+            if(c.len>1.8*lenB+3*tolM||lenB>1.8*c.len+3*tolM)return;
+            if(!best||e<best.e)best={c:c,e:e};
+          });
+          if(best&&(best.c.len>0.05||lenB>0.05)){
+            const poly=[P[i]].concat(best.c.verts).concat([P[j]]).map(q=>({lat:q.lat,lng:q.lng}));
+            let ok=true;
+            for(const k of inter){if(distToPoly(rb[k],poly)>gapM){ok=false;break;}}
+            if(ok&&!inter.length){
+              const chord=dm(P[i],P[j]);let dev=0;
+              best.c.verts.forEach(v=>{dev=Math.max(dev,distToPoly(v,[P[i],P[j]].map(q=>({lat:q.lat,lng:q.lng}))));});
+              if(dev>Math.max(3*tolM,0.4*chord))ok=false;
+            }
+            if(ok)rep={verts:best.c.verts};
+          }
+        }
+        if(rep){
+          {const oldV=inter.map(k=>rb[k]),sq=(a,b)=>a.length===b.length&&a.every((p,t)=>dm(p,b[t])<0.05);
+           if(!(sq(oldV,rep.verts)||sq(oldV,rep.verts.slice().reverse())))meaningful=true;}
+          nStretch++;nRemoved+=inter.length;
+          rep.verts.forEach(v=>out.push({lat:v.lat,lng:v.lng,ins:null}));
+          reps.push({old:[i].concat(inter).concat([j]).map(k=>keyOf(rb[k])),nw:[P[i]].concat(rep.verts.map(v=>({lat:v.lat,lng:v.lng}))).concat([P[j]])});
+        }else{
+          inter.forEach(k=>out.push({lat:rb[k].lat,lng:rb[k].lng,ins:null}));
+        }
+      }
+      an.forEach(k=>{
+        nSnap++;const q=P[k];
+        reps.push({old:[keyOf(rb[k])],nw:[q]});
+        if(q.ins){const key=q.ins.ri;let a=insReq.get(key);if(!a)insReq.set(key,a=[]);a.push({i:q.ins.i,u:q.ins.u,lat:q.lat,lng:q.lng});}
+      });
+      newRings.push(out);
     });
+    if(!newRings.some(x=>x))return{changed:false,reason:'yakın çizgi yok'};
+    if(!meaningful)return{changed:false,reason:'zaten birleşik'};
+    /* A'ya ortak köşe ekle (şekli değişmez) */
+    let inserted=0;
+    insReq.forEach((arr,ri)=>{
+      const R=Ar[ri];arr.sort((a,b)=>b.i-a.i||b.u-a.u);let last=null;
+      arr.forEach(e=>{
+        if(last&&last.i===e.i&&Math.abs(last.lat-e.lat)<1e-9&&Math.abs(last.lng-e.lng)<1e-9)return;
+        R.r.splice(e.i+1,0,L.latLng(e.lat,e.lng));inserted++;last=e;
+      });
+    });
+    /* B halkalarını yaz */
     const same=(a,b)=>Math.abs(a.lat-b.lat)<1e-9&&Math.abs(a.lng-b.lng)<1e-9;
-    dirty.forEach(o=>{
-      if(o===A){o.setLatLngs(o.getLatLngs());return;}
-      ringsOf(o).forEach(r=>{for(let i=r.length-1;i>0&&r.length>3;i--){if(same(r[i],r[i-1]))r.splice(i,1);}if(r.length>3&&same(r[0],r[r.length-1]))r.pop();});
-      o.setLatLngs(o.getLatLngs());
+    const touched=new Set([B]);if(inserted)touched.add(A);
+    ringsOf(B).forEach((rb,idx)=>{
+      const nr=newRings[idx];if(!nr)return;
+      const ded=[];nr.forEach(p=>{if(!ded.length||!same(p,ded[ded.length-1]))ded.push(p);});
+      while(ded.length>1&&same(ded[0],ded[ded.length-1]))ded.pop();
+      if(ded.length<3)return;
+      rb.length=0;ded.forEach(p=>rb.push(L.latLng(p.lat,p.lng)));
     });
-    edited([...dirty]);refreshTips();autosave();buildIdx();rebuild();
-    pkFlash(B);
-    const msg=(B._p.name||'2. sınır')+' → '+(A._p.name||'1. sınır')+' sınırına birleştirildi: '+moved+' köşe yapıştı, '+followed+' köşe kıvrım izlendi. 1. sınır yerinde kaldı. Ctrl+Z geri alır.';
-    pkMsg(msg);toast(msg,6000);
+    /* komşuları (B ile ortak köşesi olanlar) aynı yöne taşı */
+    if(linkOn&&others&&others.length){
+      others.forEach(o=>{
+        let ch=false;
+        ringsOf(o).forEach(r=>{
+          reps.forEach(rp=>{
+            const m=rp.old.length;if(!m)return;
+            for(let p=0;p<r.length;p++){
+              if(keyOf(r[p])!==rp.old[0])continue;
+              let fw=p+m<=r.length,bw=p-m+1>=0;
+              for(let q=1;q<m&&(fw||bw);q++){
+                if(fw&&keyOf(r[p+q])!==rp.old[q])fw=false;
+                if(bw&&keyOf(r[p-q])!==rp.old[q])bw=false;
+              }
+              if(fw){r.splice(p,m,...rp.nw.map(q=>L.latLng(q.lat,q.lng)));ch=true;break;}
+              if(bw){r.splice(p-m+1,m,...rp.nw.slice().reverse().map(q=>L.latLng(q.lat,q.lng)));ch=true;break;}
+            }
+          });
+        });
+        if(ch)touched.add(o);
+      });
+    }
+    return{changed:true,touched:[...touched],snapped:nSnap,stretches:nStretch,removed:nRemoved,inserted:inserted};
   }
+
+  function mergeToAnchor(A,B){
+    if(A===B)return;
+    const mpp=mppNow(),tolM=Math.max(3,Math.min(400,(parseFloat($('pkMerge').value)||40)*mpp));
+    const gapM=Math.max(tolM,Math.min(2500,(parseFloat($('pkGap').value)||160)*mpp));
+    const bbB=B.getBounds(),pad=gapM/110574*1.5;
+    const bb=L.latLngBounds([bbB.getSouth()-pad,bbB.getWest()-pad],[bbB.getNorth()+pad,bbB.getEast()+pad]);
+    if(!A.getBounds().intersects(bb)){toast('Bu iki sınır birbirine yakın değil. “En büyük boşluk”u artır veya yakınlaş.',6000);return;}
+    const link=$('dsLink').checked,others=[];
+    if(link){
+      admin.eachLayer(o=>{if(o!==A&&o!==B&&o instanceof L.Polygon&&o.getBounds().intersects(bb))others.push(o);});
+      drawn.eachLayer(o=>{if(o!==A&&o!==B&&isVec(o)&&o.getBounds().intersects(bb))others.push(o);});
+    }
+    pushU([A,B].concat(others));
+    const r=conformStretches(A,B,tolM,gapM,others,link);
+    if(!r.changed){
+      DS.undo.pop();
+      const t=r.reason==='zaten birleşik'?'Bu iki sınır zaten boşluksuz birleşik.':'Bu iki sınırın '+Math.round(gapM)+' m içinde birbirine bakan kenarı yok. “En büyük boşluk (px)” değerini artır veya yakınlaş.';
+      pkMsg(t);toast(t,5000);return;
+    }
+    r.touched.forEach(o=>{o._pole=null;o.setLatLngs(o.getLatLngs());});
+    edited(r.touched);refreshTips();autosave();buildIdx();rebuild();pkFlash(B);
+    const msg=(B._p.name||'2. sınır')+' → '+(A._p.name||'1. sınır')+': '+r.stretches+' kenar boşluksuz 1. sınırın çizgisine oturtuldu ('+r.snapped+' köşe, '+r.inserted+' ortak köşe eklendi). 1. sınır yerinden oynamadı. Ctrl+Z geri alır.';
+    pkMsg(msg);toast(msg,6500);
+  }
+  window.__conform=conformStretches;
+
+  /* ---- komşu sınırlar arasındaki boşlukları topluca kapat + denetim ---- */
+  const bdGrp=l=>{const v=(l._p&&l._p.lvl)||0;return v<=4?4:v<=6?6:10;};
+  async function closeGapsAll(layers,tolM,gapM,say){
+    const pad=gapM/110574*1.3,byLv=new Map();
+    layers.forEach(l=>{if(!(l instanceof L.Polygon)||!l._p)return;const g=bdGrp(l);let a=byLv.get(g);if(!a)byLv.set(g,a=[]);a.push(l);});
+    let fixed=0,tested=0;const touched=new Set();let T0=performance.now();
+    for(const arr of byLv.values()){
+      arr.sort((a,b)=>(a._p.name||'').localeCompare(b._p.name||'','tr'));
+      const bbs=arr.map(l=>l.getBounds());
+      for(let i=0;i<arr.length;i++){
+        for(let j=i+1;j<arr.length;j++){
+          const a=bbs[i],b=bbs[j];
+          if(b.getWest()>a.getEast()+pad||b.getEast()<a.getWest()-pad||b.getSouth()>a.getNorth()+pad||b.getNorth()<a.getSouth()-pad)continue;
+          tested++;
+          const r=conformStretches(arr[i],arr[j],tolM,gapM,[],false);
+          if(r.changed){fixed++;r.touched.forEach(o=>{o._pole=null;o.setLatLngs(o.getLatLngs());touched.add(o);});bbs[i]=arr[i].getBounds();bbs[j]=arr[j].getBounds();}
+        }
+        if(performance.now()-T0>30){await sleep();T0=performance.now();if(say)say('Boşluklar kapatılıyor… '+(i+1)+' / '+arr.length);}
+      }
+    }
+    return{fixed:fixed,tested:tested,touched:[...touched]};
+  }
+  window.__closeGaps=closeGapsAll;
+  function auditBorders(layers,tolM){
+    const polys=layers.filter(l=>l instanceof L.Polygon&&l._p),res={n:polys.length,exact:0,near:0,hier:0,bad:0,dup:0,polyNear:new Set()};
+    if(!polys.length)return res;
+    const ky=110574,lat0=polys[0].getBounds().getCenter().lat,kx=Math.cos(lat0*Math.PI/180)*111320,cell=Math.max(tolM*2,60);
+    const groups=new Map();polys.forEach(l=>{const g=bdGrp(l);let a=groups.get(g);if(!a)groups.set(g,a=[]);a.push(l);});
+    const gridOf=arr=>{
+      const grid=new Map();
+      arr.forEach((l,oi)=>ringsOf(l).forEach(r=>{
+        const n=r.length;
+        for(let i=0;i<n;i++){
+          const a=r[i],b=r[(i+1)%n],ax=a.lng*kx,ay=a.lat*ky,bx=b.lng*kx,by=b.lat*ky;
+          const x0=Math.floor(Math.min(ax,bx)/cell),x1=Math.floor(Math.max(ax,bx)/cell),y0=Math.floor(Math.min(ay,by)/cell),y1=Math.floor(Math.max(ay,by)/cell);
+          if((x1-x0+1)*(y1-y0+1)>3000)continue;
+          const sg={o:oi,ax:ax,ay:ay,bx:bx,by:by};
+          for(let x=x0;x<=x1;x++)for(let y=y0;y<=y1;y++){const k=x+','+y;let q=grid.get(k);if(!q)grid.set(k,q=[]);q.push(sg);}
+        }
+      }));
+      return grid;
+    };
+    const minDist=(grid,p,skip)=>{
+      const px=p.lng*kx,py=p.lat*ky,cx=Math.floor(px/cell),cy=Math.floor(py/cell),seen=new Set();let best=1e18;
+      for(let x=cx-1;x<=cx+1;x++)for(let y=cy-1;y<=cy+1;y++){
+        const q=grid.get(x+','+y);if(!q)continue;
+        for(const sg of q){
+          if(sg.o===skip||seen.has(sg))continue;seen.add(sg);
+          const dx=sg.bx-sg.ax,dy=sg.by-sg.ay,d2=dx*dx+dy*dy;let u=d2?((px-sg.ax)*dx+(py-sg.ay)*dy)/d2:0;u=u<0?0:u>1?1:u;
+          const d=Math.hypot(px-(sg.ax+u*dx),py-(sg.ay+u*dy));if(d<best)best=d;
+        }
+      }
+      return best;
+    };
+    const grids=new Map();groups.forEach((arr,g)=>grids.set(g,gridOf(arr)));
+    groups.forEach((arr,g)=>{
+      const grid=grids.get(g);
+      arr.forEach((l,oi)=>ringsOf(l).forEach(r=>{
+        const n=r.length;let ar=0;
+        if(n<3)res.bad++;
+        for(let i=0;i<n;i++){
+          const p=r[i],q=r[(i+1)%n];
+          ar+=(p.lng*kx)*(q.lat*ky)-(q.lng*kx)*(p.lat*ky);
+          if(Math.abs(p.lat-q.lat)<1e-9&&Math.abs(p.lng-q.lng)<1e-9)res.dup++;
+          const d=minDist(grid,p,oi);
+          if(d<=0.3)res.exact++;else if(d<=tolM){res.near++;res.polyNear.add(l);}
+          if(g<10){/* üst seviyeyle karşılaştırma yok */}
+        }
+        if(n>=3&&Math.abs(ar/2)<1)res.bad++;
+      }));
+    });
+    /* hiyerarşi: ince seviye köşeleri kaba seviyenin çizgisine tam oturuyor mu */
+    [[10,6],[10,4],[6,4]].forEach(pr=>{
+      const fine=groups.get(pr[0]),coarse=groups.get(pr[1]);if(!fine||!coarse)return;
+      const grid=grids.get(pr[1]);
+      fine.forEach(l=>ringsOf(l).forEach(r=>{r.forEach(p=>{const d=minDist(grid,p,-1);if(d>0.3&&d<=tolM){res.hier++;res.polyNear.add(l);}});}));
+    });
+    return res;
+  }
+  window.__audit=auditBorders;
 
   /* ---- çizgi kes ve taşı: sınırlarda kesit ---- */
   DS.sdrag=null;DS.cutSec=null;
@@ -7440,6 +7715,46 @@ window.__atlas={TM:TM,tmConnect:tmConnect,tmDisconnect:tmDisconnect,tmSend:tmSen
   function trSyncSoon(){clearTimeout(TRE.t);TRE.t=setTimeout(trSync,500);}
   $('trQ').addEventListener('input',()=>{clearTimeout(TRE.q);TRE.q=setTimeout(trBuild,250);});
   trBuild();
+
+
+  /* ---- güncel harita / denetim / onarım düğmeleri ---- */
+  (function(){
+    const D=window.TR_SINIR,sl=$('osmIl');
+    if(sl){sl.innerHTML='<option value="">(il seç)</option>'+(D&&D.il?D.il.map(x=>'<option value="'+esc(x.n)+'">'+esc(x.n)+'</option>').join(''):'');sl.value='Aydın';}
+  })();
+  const auMsg=t=>{const e=$('auditMsg');if(e)e.textContent=t;};
+  const auText=(r,tolM)=>'Denetim ('+Math.round(tolM)+' m): '+r.n+' sınır. Komşu sınırlarda boşluk/çakışma olan köşe: '+r.near+' ('+r.polyNear.size+' sınır); tam örtüşen köşe: '+r.exact+'. Mahalle→ilçe→il uyumsuz köşe: '+r.hier+'. Hatalı halka: '+r.bad+', tekrar eden köşe: '+r.dup+'.';
+  $('auditBtn').onclick=()=>{
+    const layers=admin.getLayers().filter(l=>l instanceof L.Polygon&&l._p&&!l._p.hidden);
+    if(!layers.length){auMsg('Haritada denetlenecek sınır yok.');return;}
+    const tolM=parseFloat($('bdTol').value)||40;
+    auMsg('Denetleniyor…');
+    setTimeout(()=>{try{auMsg(auText(auditBorders(layers,tolM),tolM));}catch(e){console.error(e);auMsg('Denetim hatası: '+e.message);}},30);
+  };
+  $('repairBtn').onclick=async()=>{
+    const layers=admin.getLayers().filter(l=>l instanceof L.Polygon&&l._p&&!l._p.hidden);
+    if(!layers.length){auMsg('Haritada onarılacak sınır yok.');return;}
+    const tolM=parseFloat($('bdTol').value)||40,vt=parseFloat($('bdVtol').value)||25;
+    auMsg('Onarılıyor… (önce mahalle→ilçe→il hiyerarşisi, sonra komşular)');
+    try{
+      pushU(layers);
+      await unifyLevels(true,null,{tolM:tolM,vtol:vt});
+      const g=await closeGapsAll(layers,tolM,Math.max(tolM*2,60),auMsg);
+      if(g.touched.length){edited(g.touched);refreshTips();autosave();buildIdx();rebuild();}
+      const rr=auditBorders(layers,tolM);
+      auMsg('Onarıldı: '+g.fixed+' komşu çifti birleştirildi. '+auText(rr,tolM)+' Ctrl+Z geri alır.');
+    }catch(e){console.error(e);auMsg('Onarma hatası: '+e.message);}
+  };
+  $('refOnBtn').onclick=()=>{
+    const c=$('pkRef');c.checked=!c.checked;c.dispatchEvent(new Event('change'));
+    if(c.checked&&state.base!=='osm'){state.base='osm';applyLayers();}
+    auMsg(c.checked?'Güncel OSM sınır çizgileri açık (mor il, turuncu ilçe, turkuaz mahalle). Yakınlaştıkça mahalleler de görünür.':'Güncel sınır çizgileri kapatıldı.');
+  };
+  $('lvColBtn').onclick=()=>{
+    let n=0;
+    admin.eachLayer(l=>{if(!(l instanceof L.Polygon)||!l._p)return;const st=LV[l._p.lvl];if(!st)return;l._p.stroke=st.stroke;l._p.weight=st.weight;restyle(l);n++;});
+    autosave();auMsg(n+' sınırın çizgi rengi seviyeye göre ayarlandı: il mor, ilçe turuncu, mahalle turkuaz.');
+  };
 
   /* ---- mod yönetimi ---- */
   function rebuild(){
