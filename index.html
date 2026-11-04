@@ -465,6 +465,18 @@ body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
  #chips{bottom:auto;position:static;max-width:100%;transform:none}
  #installBtn{bottom:74px!important}
 }
+/* arama sonuçları üstte; Sınırlar sekmesi grup başlıkları; Buraya git */
+#searchForm{z-index:1300!important}
+#results{z-index:1400;max-height:min(60vh,430px);overflow:auto;border-radius:12px}
+#results .sg{padding:9px 12px}
+.grp{margin:18px 2px 8px;font-size:11px;font-weight:700;letter-spacing:.9px;text-transform:uppercase;color:#64748b;display:flex;align-items:center;gap:10px}
+.grp::after{content:'';flex:1;height:1px;background:var(--line)}
+.tab>.grp:first-child{margin-top:4px}
+#cGoHere{margin-left:8px;background:linear-gradient(180deg,#3b82f6,#2563eb);color:#fff;border:0;border-radius:999px;padding:3px 12px;font-size:11.5px;font-weight:700;cursor:pointer}
+#cGoHere[hidden]{display:none}
+.leaflet-popup-content .rtt{width:100%;border-collapse:collapse}
+.leaflet-popup-content .rtt td{padding:3px 4px;border-bottom:1px solid #eef2f7}
+.leaflet-popup-content-wrapper{border-radius:14px;box-shadow:0 12px 32px rgba(15,23,42,.3)}
 </style>
 </head>
 <body>
@@ -534,12 +546,13 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       <p class="note">Fare tekerleği veya iki parmakla yakınlaştırma kademeli ve akıcıdır. Sınırlar altlıktaki çizgilerle tutmuyorsa Yer adları – sınır çizgisiz seçeneğini ve Sınırlar sekmesindeki Sınır hizalama bölümünü kullanın.</p></div></details>
 <details class="card"><summary>Altlık durumu</summary><div class="cbody"><p class="note" style="margin-top:0">Her altlığın bu ağda çalışıp çalışmadığı otomatik sınanır. Çalışmayan bir altlık seçilirse yedeği gösterilir.</p><div id="probeList"></div><div class="btns"><button id="probeBtn">Altlıkları yeniden sına</button></div></div></details>
 </div>
-<div class="tab" id="t2"><details class="card" open id="qrCard"><summary>🗺️ Bölge boyama – il, ilçe, mahalle</summary><div class="cbody">
+<div class="tab" id="t2"><div class="grp">Bölge ekle ve boya</div><p class="note" style="margin:-2px 2px 8px">İl, ilçe veya mahalle seçin; tek adımda ekleyip renklendirin.</p><details class="card" open id="qrCard"><summary>🗺️ Bölge boyama – il, ilçe, mahalle</summary><div class="cbody">
+  <label style="margin-top:0">1 · Bölge</label>
   <div class="qrgrid"><div><label>İl</label><select id="qrIl"></select></div><div><label>İlçe</label><select id="qrIlce"></select></div></div>
   <div class="qstat" id="qrStat"></div>
-  <label>Haritaya eklenecek seviyeler</label>
+  <label>2 · Eklenecek seviyeler</label>
   <div class="qchips"><label class="qchip"><input type="checkbox" id="qrLvIl"><span>İl sınırı</span></label><label class="qchip"><input type="checkbox" id="qrLvIlce" checked><span>İlçeler</span></label><label class="qchip" id="qrLvMahW"><input type="checkbox" id="qrLvMah"><span>Mahalleler</span></label></div>
-  <label>Renklendirme</label>
+  <label>3 · Renklendirme biçimi</label>
   <div class="seg qseg" id="qrMode"><button data-m="none">Renksiz</button><button data-m="one">Tek renk</button><button data-m="ilce" class="on">İlçe başına</button><button data-m="mah">Mahalle başına</button><button data-m="tone">İlçe tonları</button></div>
   <p class="note" id="qrModeHelp" style="margin:0 0 8px"></p>
   <div class="row"><div><label>Palet</label><select id="qrPal"><option>Canlı</option><option>Pastel</option><option>Doğa</option><option>Soğuk</option><option>Sıcak</option><option>Gökkuşağı</option></select></div><div style="flex:0 0 auto"><label>Tek renk</label><input type="color" id="qrCol" value="#e53935"></div></div>
@@ -547,51 +560,15 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
   <label class="chk"><input type="checkbox" id="qrLab" checked> Adları göster (yakınlaşınca)</label>
   <label class="chk" title="Haritada eklemediğiniz illerin de sınır çizgilerini gösterir. Bu çizgiler seçilemez; kapalıyken yalnızca eklediğiniz alanların çizgileri görünür."><input type="checkbox" id="qrNetAll"> Tüm Türkiye sınır ağını göster (seçilemez)</label>
   <div class="btns"><button class="main" id="qrGo">Haritaya ekle ve renklendir</button><button id="qrLine">Yalnızca sınır ekle</button></div>
-  <div class="btns"><button id="qrUnpaint">Renkleri kaldır</button><button class="danger" id="qrRemove">Alanları kaldır</button></div>
+  <hr><label style="margin-top:2px">Haritada zaten olan alanlar</label>
+  <select id="qrScope"><option value="sel">Yukarıda seçili il / ilçe (yerleşik veri)</option><option value="view">Ekranda görünen tüm alanlar</option><option value="all">Haritadaki tüm alanlar (her kaynak)</option></select>
+  <div class="btns"><button id="qrPaintEx" class="main">Bu ayarlarla boya</button><button id="qrUnpaint">Renkleri kaldır</button><button class="danger" id="qrRemove">Alanları kaldır</button></div>
   <div class="qprog" id="qrProg" hidden><div id="qrBar"></div></div>
   <div class="msg" id="qrMsg"></div>
   <div class="qsel" id="qrSelBox"></div>
   <p class="note">Tüm sınırlar tek çizgi olarak çizilir: komşu iki alanın ortak sınırı üst üste değil, bir kez gösterilir. Mahalle verisi 25 il için yerleşiktir; diğer illerde il ve ilçe sınırları kullanılır.</p>
 </div></details>
-<details class="card" id="snCard"><summary>🧲 Zemin haritasındaki sınıra oturt</summary><div class="cbody">
-  <p class="note" style="margin:0 0 6px">Sınırların bozuk göründüğü yeri yakınlaştırın (öneri: yakınlaştırma 11–14). <b>1)</b> “Çizgi rengini seç”e basıp zemin haritasındaki kesik sınır çizgisine tıklayın. <b>2)</b> “Önizle” ile önerilen yeni konumu görün. <b>3)</b> Doğruysa “Uygula”. Yalnızca ekranda görünen il/ilçe/mahalle çizgileri ve dolguları birlikte düzelir, ortak sınırlar birbirinden ayrılmaz.</p>
-  <div class="row"><div><button id="snPick" class="main" style="width:100%">Çizgi rengini seç</button></div><div style="flex:0 0 auto"><span id="snSw" title="Seçilen renk" style="display:inline-block;width:36px;height:36px;border-radius:10px;border:1px solid #d5dde8;background:repeating-conic-gradient(#e2e8f0 0 25%,#fff 0 50%) 50%/12px 12px"></span></div></div>
-  <label>Arama mesafesi <b id="snRv">12 px</b></label><input type="range" id="snR" min="4" max="30" value="12">
-  <label>Renk toleransı <b id="snTv">55</b></label><input type="range" id="snTol" min="10" max="140" value="55">
-  <label>En fazla kayma <b id="snMv">150 m</b></label><input type="range" id="snMax" min="20" max="600" step="10" value="150">
-  <div class="btns"><button id="snPrev">Önizle</button><button id="snApply" class="main">Uygula ve yenile</button></div>
-  <div class="btns"><button id="snUndo">Son düzeltmeyi geri al</button><button id="snReset" class="danger">Tümünü sıfırla</button></div>
-  <div class="btns"><button id="snExp">Düzeltmeleri indir</button><button id="snImp">Düzeltme yükle</button></div>
-  <div class="msg" id="snMsg"></div>
-  <p class="note">Güvenlik: bir noktanın kayması “en fazla kayma” değerini aşmaz, çizginin bulunmadığı yerlere dokunulmaz ve düzeltme önce önizlenir. Zemin haritası kutucukları okunamazsa (tarayıcı izin vermezse) araç uyarı verir.</p>
-</div></details>
-<details class="card"><summary>Gelişmiş – liste ile tek tek seçim</summary><div class="cbody">
-      <div class="seg"><button id="segIl" class="on">İller</button><button id="segIlce">İlçeler</button><button id="segMah">Mahalleler</button></div>
-      <div id="rgIlWrap" hidden><label>İl</label><select id="rgIl"></select></div>
-      <div id="rgIlceWrap" hidden><label>İlçe</label><select id="rgIlce"></select></div>
-      <input type="text" id="rgFilter" placeholder="Listede ara..." style="margin-top:8px">
-      <p class="note">Elle düzenlediğin sınırlar hiçbir düğmeyle silinmez: “Seçilenleri kaldır” veya “Tüm seviyeleri kaldır” dersen bile saklanır, “Hepsini ekle” ile aynen geri gelir.</p>
-      <div class="btns"><button class="main" id="rgAll">Hepsini ekle</button><button class="danger" id="rgNone">Seçilenleri kaldır</button><button class="danger" id="rgClearAll">Tüm seviyeleri kaldır</button><button id="rgMulti">Farklı renkler</button></div>
-      <div class="btns"><button class="main" id="rgPaintSel">🎨 Seçilenleri renklendir</button><button id="rgUnpaint">Renkleri kaldır</button></div>
-      <p class="note" style="margin:4px 0 0">Listede kutusu işaretli (haritada ekli) alanlar “Tek renk” ve “Yoğunluk” ile boyanır. Hiçbiri işaretli değilse haritada seçili sınır boyanır. Ekleme sırasında sınırlar boyanmadan, yalnızca çizgi olarak gelir.</p>
-      <div class="row" style="margin-top:8px"><div style="flex:0 0 auto"><label>Tek renk</label><input type="color" id="rgOneCol" value="#e53935"></div><div><label>Yoğunluk (hepsi)</label><input type="range" id="rgOpAll" min="0.1" max="1" step="0.05" value="0.5"></div></div>
-      <label class="chk"><input type="checkbox" id="rgLabels" checked> Adları göster (yakınlaşınca)</label>
-      <div id="rgOsmBox" class="btns" hidden><button id="rgOsm">OpenStreetMap'ten mahalleleri getir</button></div>
-      <div id="rgFixBox" class="btns" hidden><span class="note" style="flex:1 1 100%;margin:0">Bu ilin ilçe sınırları yerleşik HDX (OCHA) verisinden. OpenStreetMap sınırıyla değiştirmek için:</span><button id="rgOsmFix">Sınırları OpenStreetMap'ten güncelle</button></div>
-      <div id="rgList"></div>
-      <div class="note" id="rgCnt"></div><div class="msg" id="rgMsg"></div>
-      <p class="note">Satırdaki kutuyu işaretleyince alan haritaya yalnızca sınır çizgisi olarak eklenir (renklendirme yok). İlçeler ve mahalleler için önce il, mahalleler için ayrıca ilçe seçin. Mahalle verisi 25 il için yerleşik.</p></div></details>
-<details class="card" id="trTreeCard"><summary>Gelişmiş – açılır ağaç liste</summary><div class="cbody"><input type="text" id="trQ" placeholder="İl veya ilçe ara..."><p class="note" style="margin:4px 0">İlin adına dokunarak ilçelerini aç; kutuyu işaretleyince sınır haritaya eklenir. Mahalle verisi olan illerde ilçenin altında mahalleler de açılır.</p><div id="trTree"></div><div class="msg" id="trTreeMsg"></div></div></details>
-<details class="card"><summary>Hızlı boyama – Aydın</summary><div class="cbody"><div id="qAydin"></div><div class="msg" id="trMsg"></div></div></details>
-<details class="card "><summary>Elle boyama (tıklayarak)</summary><div class="cbody">
-      <p class="note" style="margin-top:0">Bir renk seçin, sonra haritada alanlara tek tek tıklayın. Bitirince "Boyamayı kapat" veya Esc.</p>
-      <div class="swrow" id="pcRow" style="flex-wrap:wrap"></div>
-      <div class="row">
-        <div style="flex:0 0 auto"><label>Özel renk</label><input type="color" id="pcColor" value="#e53935"></div>
-        <div><label>Dolgu yoğunluğu</label><input type="range" id="pcOp" min="0.1" max="1" step="0.05" value="0.55"></div>
-      </div>
-      <div class="btns"><button class="main" id="pcToggle">Boyamayı aç</button><button id="pcErase">Silgi</button></div>
-    </div></details><details class="card "><summary>Sınır yönetimi</summary><div class="cbody"><div class="lvrow"><label class="chk"><input type="checkbox" id="lvUlke" checked> Ülke sınırı</label><button class="sm danger" id="rmUlke">Kaldır</button></div>
+<div class="grp">Haritadaki alanları yönet</div><details class="card "><summary>Sınır yönetimi</summary><div class="cbody"><div class="lvrow"><label class="chk"><input type="checkbox" id="lvUlke" checked> Ülke sınırı</label><button class="sm danger" id="rmUlke">Kaldır</button></div>
       <div class="lvrow"><label class="chk"><input type="checkbox" id="lvIl" checked> İl sınırları</label><button class="sm danger" id="rmIl">Kaldır</button></div>
       <div class="lvrow"><label class="chk"><input type="checkbox" id="lvIlce" checked> İlçe sınırları</label><button class="sm danger" id="rmIlce">Kaldır</button></div>
       <div class="lvrow"><label class="chk"><input type="checkbox" id="lvMah" checked> Mahalle ve köy sınırları</label><button class="sm danger" id="rmMah">Kaldır</button></div>
@@ -603,20 +580,8 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       <b>Mahalle motoru</b>
       <p class="note" style="margin-top:2px">Mahalle verisini sıfırdan oluşturur; renkler korunur.</p>
       <div class="btns"><button class="main" id="engRefresh">Mahalle motorunu yenile</button><button class="danger" id="engRemove">Mahalleleri kaldır</button></div>
-      <div class="msg" id="engMsg"></div></div></details><details class="card"><summary>Sınır hizalama (kaydırma)</summary><div class="cbody"><p class="note" style="margin-top:0">Çizilen sınırlar uydu görüntüsü veya altlıktaki yollar ve çizgilerle kayıksa buradan metre cinsinden kaydırın. Ayar seçilen kaynaktaki tüm sınırlara uygulanır ve projeyle kaydedilir.</p>
-      <label>Hangi sınırlar</label>
-      <select id="alSrc"><option value="local">Mahalle verisi (yerleşik, 25 il)</option><option value="gadm">İl ve ilçe sınırları (HDX)</option><option value="osm">OpenStreetMap ve dosyadan gelenler</option></select>
-      <div class="pgrid"><div><label>Doğu (+) / batı (−) m</label><input type="number" id="alE" step="1" value="0"></div><div><label>Kuzey (+) / güney (−) m</label><input type="number" id="alN" step="1" value="0"></div></div>
-      <input type="range" id="alEr" min="-500" max="500" step="1" value="0" style="margin-top:6px"><input type="range" id="alNr" min="-500" max="500" step="1" value="0">
-      <div class="row" style="margin-top:8px"><div style="flex:0 0 auto"><button id="alL">◀</button> <button id="alR">▶</button> <button id="alU">▲</button> <button id="alD">▼</button></div><div><select id="alStep"><option value="1">1 m adım</option><option value="5" selected>5 m adım</option><option value="25">25 m adım</option></select></div></div>
-      <div class="btns"><button class="main" id="alPick">Haritadan hizala (2 tık)</button><button id="alEd50">ED50 → WGS84 düzeltmesi</button><button class="danger" id="alReset">Sıfırla</button></div>
-      <div class="msg" id="alInfo"></div>
-      <p class="note">İpucu: Haritadan hizala: önce sınırın şu an çizildiği noktaya (ör. bir mahalle köşesi), sonra uydu görüntüsünde olması gereken noktaya (ör. yol veya dere kesişimi) tıklayın. Türkiye'deki eski (ED50) verilerde tipik kayma yaklaşık 40 m doğu-batı ve 110 m kuzey-güneydir; ED50 düğmesi bu yaklaşık değeri bölgenize göre uygular.</p></div></details>
-<details class="card "><summary>Sınır ara</summary><div class="cbody">
-      <input type="text" id="bsQ" placeholder="İl, ilçe veya mahalle adı (örn. Zafer)" autocomplete="off">
-      <div id="bsRes" hidden></div>
-      <p class="note">Bulunan sınır haritaya eklenir, yakınlaşılır ve düzenlemek için seçilir. Mahalle araması Aydın verisini kapsar.</p>
-    </div></details><details class="card "><summary>Toplu görünüm (kenar ve dolgu)</summary><div class="cbody">
+      <div class="msg" id="engMsg"></div></div></details>
+<details class="card "><summary>Toplu görünüm (kenar ve dolgu)</summary><div class="cbody">
       <label>Hangi sınırlara</label>
       <select id="asLvl"><option value="all">Hepsi</option><option value="4">İl</option><option value="6">İlçe</option><option value="7">Belde</option><option value="10">Mahalle (admin level 10)</option><option value="8|9|10">Mahalle ve köy (karma)</option></select>
       <div class="row">
@@ -637,7 +602,22 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       </div>
       <div class="row"><div style="flex:0 0 auto"><label>Dolgu rengi</label><input type="color" id="asFill" value="#e53935"></div></div>
       <div class="btns"><button class="main" id="asApply">Kenarı uygula</button><button id="asFillBtn">Dolguyu uygula</button><button id="asRand">Farklı renkler</button></div>
-    </div></details><details class="card "><summary>OpenStreetMap ile getir (gelişmiş)</summary><div class="cbody">
+    </div></details>
+<details class="card "><summary>Elle boyama (tıklayarak)</summary><div class="cbody">
+      <p class="note" style="margin-top:0">Bir renk seçin, sonra haritada alanlara tek tek tıklayın. Bitirince "Boyamayı kapat" veya Esc.</p>
+      <div class="swrow" id="pcRow" style="flex-wrap:wrap"></div>
+      <div class="row">
+        <div style="flex:0 0 auto"><label>Özel renk</label><input type="color" id="pcColor" value="#e53935"></div>
+        <div><label>Dolgu yoğunluğu</label><input type="range" id="pcOp" min="0.1" max="1" step="0.05" value="0.55"></div>
+      </div>
+      <div class="btns"><button class="main" id="pcToggle">Boyamayı aç</button><button id="pcErase">Silgi</button></div>
+    </div></details>
+<details class="card "><summary>Sınır ara</summary><div class="cbody">
+      <input type="text" id="bsQ" placeholder="İl, ilçe veya mahalle adı (örn. Zafer)" autocomplete="off">
+      <div id="bsRes" hidden></div>
+      <p class="note">Bulunan sınır haritaya eklenir, yakınlaşılır ve düzenlemek için seçilir. Mahalle araması Aydın verisini kapsar.</p>
+    </div></details>
+<div class="grp">Veri kaynakları</div><details class="card "><summary>OpenStreetMap ile getir (gelişmiş)</summary><div class="cbody">
       <label>Seviye (haritada görünen alan için)</label>
       <select id="admLevel">
         <option value="4">İl</option>
@@ -658,11 +638,52 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       <label>Üst alanın adı</label>
       <input type="text" id="admName" placeholder="Efeler">
       <div class="btns"><button class="main" id="admByName">Adıyla getir</button><button id="admAydin">Aydın mahallelerini getir</button></div>
-    </div></details><details class="card "><summary>Dosyadan sınır aç</summary><div class="cbody">
+    </div></details>
+<details class="card "><summary>Dosyadan sınır aç</summary><div class="cbody">
       <p class="note" style="margin-top:0">GeoJSON, KML, KMZ veya Shapefile (.zip) açın. Alanlar sınır katmanına eklenir, ad bilgisi dosyadan okunur.</p>
       <div class="btns"><button id="geoOpen">Dosya aç</button></div>
       <input type="file" id="geoIn" accept=".geojson,.json,.kml,.kmz,.zip,application/geo+json,application/json" hidden>
-    </div></details></div>
+    </div></details>
+<div class="grp">Hassas düzeltme</div><details class="card" id="snCard"><summary>🧲 Zemin haritasındaki sınıra oturt</summary><div class="cbody">
+  <p class="note" style="margin:0 0 6px">Sınırların bozuk göründüğü yeri yakınlaştırın (öneri: yakınlaştırma 11–14). <b>1)</b> “Çizgi rengini seç”e basıp zemin haritasındaki kesik sınır çizgisine tıklayın. <b>2)</b> “Önizle” ile önerilen yeni konumu görün. <b>3)</b> Doğruysa “Uygula”. Yalnızca ekranda görünen il/ilçe/mahalle çizgileri ve dolguları birlikte düzelir, ortak sınırlar birbirinden ayrılmaz.</p>
+  <div class="row"><div><button id="snPick" class="main" style="width:100%">Çizgi rengini seç</button></div><div style="flex:0 0 auto"><span id="snSw" title="Seçilen renk" style="display:inline-block;width:36px;height:36px;border-radius:10px;border:1px solid #d5dde8;background:repeating-conic-gradient(#e2e8f0 0 25%,#fff 0 50%) 50%/12px 12px"></span></div></div>
+  <label>Arama mesafesi <b id="snRv">12 px</b></label><input type="range" id="snR" min="4" max="30" value="12">
+  <label>Renk toleransı <b id="snTv">55</b></label><input type="range" id="snTol" min="10" max="140" value="55">
+  <label>En fazla kayma <b id="snMv">150 m</b></label><input type="range" id="snMax" min="20" max="600" step="10" value="150">
+  <div class="btns"><button id="snPrev">Önizle</button><button id="snApply" class="main">Uygula ve yenile</button></div>
+  <div class="btns"><button id="snUndo">Son düzeltmeyi geri al</button><button id="snReset" class="danger">Tümünü sıfırla</button></div>
+  <div class="btns"><button id="snExp">Düzeltmeleri indir</button><button id="snImp">Düzeltme yükle</button></div>
+  <div class="msg" id="snMsg"></div>
+  <p class="note">Güvenlik: bir noktanın kayması “en fazla kayma” değerini aşmaz, çizginin bulunmadığı yerlere dokunulmaz ve düzeltme önce önizlenir. Zemin haritası kutucukları okunamazsa (tarayıcı izin vermezse) araç uyarı verir.</p>
+</div></details>
+<details class="card"><summary>Sınır hizalama (kaydırma)</summary><div class="cbody"><p class="note" style="margin-top:0">Çizilen sınırlar uydu görüntüsü veya altlıktaki yollar ve çizgilerle kayıksa buradan metre cinsinden kaydırın. Ayar seçilen kaynaktaki tüm sınırlara uygulanır ve projeyle kaydedilir.</p>
+      <label>Hangi sınırlar</label>
+      <select id="alSrc"><option value="local">Mahalle verisi (yerleşik, 25 il)</option><option value="gadm">İl ve ilçe sınırları (HDX)</option><option value="osm">OpenStreetMap ve dosyadan gelenler</option></select>
+      <div class="pgrid"><div><label>Doğu (+) / batı (−) m</label><input type="number" id="alE" step="1" value="0"></div><div><label>Kuzey (+) / güney (−) m</label><input type="number" id="alN" step="1" value="0"></div></div>
+      <input type="range" id="alEr" min="-500" max="500" step="1" value="0" style="margin-top:6px"><input type="range" id="alNr" min="-500" max="500" step="1" value="0">
+      <div class="row" style="margin-top:8px"><div style="flex:0 0 auto"><button id="alL">◀</button> <button id="alR">▶</button> <button id="alU">▲</button> <button id="alD">▼</button></div><div><select id="alStep"><option value="1">1 m adım</option><option value="5" selected>5 m adım</option><option value="25">25 m adım</option></select></div></div>
+      <div class="btns"><button class="main" id="alPick">Haritadan hizala (2 tık)</button><button id="alEd50">ED50 → WGS84 düzeltmesi</button><button class="danger" id="alReset">Sıfırla</button></div>
+      <div class="msg" id="alInfo"></div>
+      <p class="note">İpucu: Haritadan hizala: önce sınırın şu an çizildiği noktaya (ör. bir mahalle köşesi), sonra uydu görüntüsünde olması gereken noktaya (ör. yol veya dere kesişimi) tıklayın. Türkiye'deki eski (ED50) verilerde tipik kayma yaklaşık 40 m doğu-batı ve 110 m kuzey-güneydir; ED50 düğmesi bu yaklaşık değeri bölgenize göre uygular.</p></div></details>
+<div class="grp">Eski liste araçları</div><details class="card"><summary>Gelişmiş – liste ile tek tek seçim</summary><div class="cbody">
+      <div class="seg"><button id="segIl" class="on">İller</button><button id="segIlce">İlçeler</button><button id="segMah">Mahalleler</button></div>
+      <div id="rgIlWrap" hidden><label>İl</label><select id="rgIl"></select></div>
+      <div id="rgIlceWrap" hidden><label>İlçe</label><select id="rgIlce"></select></div>
+      <input type="text" id="rgFilter" placeholder="Listede ara..." style="margin-top:8px">
+      <p class="note">Elle düzenlediğin sınırlar hiçbir düğmeyle silinmez: “Seçilenleri kaldır” veya “Tüm seviyeleri kaldır” dersen bile saklanır, “Hepsini ekle” ile aynen geri gelir.</p>
+      <div class="btns"><button class="main" id="rgAll">Hepsini ekle</button><button class="danger" id="rgNone">Seçilenleri kaldır</button><button class="danger" id="rgClearAll">Tüm seviyeleri kaldır</button><button id="rgMulti">Farklı renkler</button></div>
+      <div class="btns"><button class="main" id="rgPaintSel">🎨 Seçilenleri renklendir</button><button id="rgUnpaint">Renkleri kaldır</button></div>
+      <p class="note" style="margin:4px 0 0">Listede kutusu işaretli (haritada ekli) alanlar “Tek renk” ve “Yoğunluk” ile boyanır. Hiçbiri işaretli değilse haritada seçili sınır boyanır. Ekleme sırasında sınırlar boyanmadan, yalnızca çizgi olarak gelir.</p>
+      <div class="row" style="margin-top:8px"><div style="flex:0 0 auto"><label>Tek renk</label><input type="color" id="rgOneCol" value="#e53935"></div><div><label>Yoğunluk (hepsi)</label><input type="range" id="rgOpAll" min="0.1" max="1" step="0.05" value="0.5"></div></div>
+      <label class="chk"><input type="checkbox" id="rgLabels" checked> Adları göster (yakınlaşınca)</label>
+      <div id="rgOsmBox" class="btns" hidden><button id="rgOsm">OpenStreetMap'ten mahalleleri getir</button></div>
+      <div id="rgFixBox" class="btns" hidden><span class="note" style="flex:1 1 100%;margin:0">Bu ilin ilçe sınırları yerleşik HDX (OCHA) verisinden. OpenStreetMap sınırıyla değiştirmek için:</span><button id="rgOsmFix">Sınırları OpenStreetMap'ten güncelle</button></div>
+      <div id="rgList"></div>
+      <div class="note" id="rgCnt"></div><div class="msg" id="rgMsg"></div>
+      <p class="note">Satırdaki kutuyu işaretleyince alan haritaya yalnızca sınır çizgisi olarak eklenir (renklendirme yok). İlçeler ve mahalleler için önce il, mahalleler için ayrıca ilçe seçin. Mahalle verisi 25 il için yerleşik.</p></div></details>
+<details class="card" id="trTreeCard"><summary>Gelişmiş – açılır ağaç liste</summary><div class="cbody"><input type="text" id="trQ" placeholder="İl veya ilçe ara..."><p class="note" style="margin:4px 0">İlin adına dokunarak ilçelerini aç; kutuyu işaretleyince sınır haritaya eklenir. Mahalle verisi olan illerde ilçenin altında mahalleler de açılır.</p><div id="trTree"></div><div class="msg" id="trTreeMsg"></div></div></details>
+<details class="card"><summary>Hızlı boyama – Aydın</summary><div class="cbody"><div id="qAydin"></div><div class="msg" id="trMsg"></div></div></details>
+</div>
 <div class="tab" id="t3"><details class="card " open><summary>Seçili öğe</summary><div class="cbody">
       <p class="note" id="pNone" style="margin-top:0">Düzenlemek için haritada bir öğeye tıklayın.</p>
       <div id="pBody" hidden>
@@ -1004,7 +1025,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
   <div id="ctl3d"><b>3B görünüm</b><label>Eğim</label><input type="range" id="t3Pitch" min="0" max="80" value="60"><label>Yükselti abartısı</label><input type="range" id="t3Ex" min="1" max="4" step="0.25" value="1.5"><div class="btns"><button id="t3North" class="sm">Kuzeye çevir</button></div></div>
   <div id="quick"><button id="quickLoc" title="Konumuma git (G)">Konum</button><button id="quick3d" title="2B/3B (D)">3B</button><button id="quickNorth" title="Kuzey">K↑</button><button id="quickFull" title="Tam ekran">Tam</button></div>
   <div id="helpBox" hidden><h3>Kısayollar</h3><table><tr><td><kbd>/</kbd></td><td>Aramaya git</td></tr><tr><td><kbd>G</kbd></td><td>Konumuma git / takibi başlat</td></tr><tr><td><kbd>D</kbd></td><td>2B ↔ 3B</td></tr><tr><td><kbd>R</kbd></td><td>Rota sekmesi</td></tr><tr><td><kbd>1 … 6</kbd></td><td>Sekmeler (Harita, Sınırlar, Çizim, Rota, Konum, İndir)</td></tr><tr><td><kbd>Ctrl+Z / Ctrl+Y</kbd></td><td>Geri al / ileri al</td></tr><tr><td><kbd>Esc</kbd></td><td>Aracı iptal et</td></tr><tr><td><kbd>Delete</kbd></td><td>Seçili öğeyi sil</td></tr><tr><td><kbd>?</kbd></td><td>Bu pencere</td></tr></table><div class="btns"><button id="helpClose">Kapat</button></div></div>
-  <div id="coords"><span id="cLL">Enlem – Boylam: –</span><span id="cUTM"></span><span id="cMGRS"></span><span id="cClick"></span><span id="cZ"></span></div>
+  <div id="coords"><span id="cLL">Enlem – Boylam: –</span><span id="cUTM"></span><span id="cMGRS"></span><span id="cClick"></span><button id="cGoHere" class="sm" hidden title="Son tıkladığınız noktaya konumunuzdan ne kadar sürede gidileceğini hesaplar">Buraya git</button><span id="cZ"></span></div>
 </div>
 </div>
 <div id="toast" hidden></div>
@@ -1983,7 +2004,56 @@ const isAyGadm=p=>!!p&&p.src==='gadm'&&(isAydin(p.parent)||(p.lvl===4&&isAydin(p
 
 /* ===== Aydın tek çizgi sınır ağı: her kenar yalnızca bir kez çizilir ===== */
 var NET={on:true,all:false,layers:{},made:false,pres:{}};
-function netEligible(l){const p=l._p;return !!p&&(!!p.localMahalle||isAyGadm(p)||(p.src==='gadm'&&(p.lvl===4||p.lvl===6)&&!!window.TR_NET));}
+
+/* ===== Diğer kaynaklı (OpenStreetMap, dosya) il/ilçe/mahalle alanları için ortak kenar ağı: her kenar bir kez ===== */
+var NETO={layer:null,sig:'',busy:false,fail:false};
+function netoLayers(){return admin.getLayers().filter(l=>l._kind==='admin'&&l._p&&!l._p.hidden&&!l._p.localMahalle&&l._p.src!=='gadm'&&(l instanceof L.Polygon));}
+async function netOtherUpdate(){
+  if(NETO.busy)return;
+  const arr=NET.on?netoLayers():[];
+  const sig=arr.length?arr.map(l=>L.stamp(l)+'.'+(parseInt(l._p.lvl)||0)).join(',')+'|'+(NET.on?1:0):'';
+  if(sig===NETO.sig)return;
+  NETO.busy=true;
+  try{
+    NETO.sig=sig;
+    if(NETO.layer){map.removeLayer(NETO.layer);NETO.layer=null;}
+    if(!arr.length)return;
+    await sleep();
+    const vid=new Map(),vlat=[],vlng=[],emap=new Map(),ea=[],eb=[],elv=[];
+    const lvc=p=>{const n=parseInt(p.lvl);if(isNaN(n))return 1;return n<=4?0:(n<=7?1:2);};
+    const vget=ll=>{const k=Math.round(ll.lat*1e6)*100000000+Math.round(ll.lng*1e6);let i=vid.get(k);if(i===undefined){i=vlat.length;vid.set(k,i);vlat.push(ll.lat);vlng.push(ll.lng);}return i;};
+    let cntL=0;
+    for(const l of arr){
+      const c=lvc(l._p),rings=[],flat=x=>{if(!x||!x.length)return;if(typeof x[0].lat==='number')rings.push(x);else x.forEach(flat);};
+      flat(l.getLatLngs());
+      for(const r of rings){const n=r.length;if(n<2)continue;let prev=vget(r[n-1]);
+        for(let i=0;i<n;i++){const cur=vget(r[i]);
+          if(cur!==prev){const a=prev<cur?prev:cur,b=prev<cur?cur:prev,k=a*8388608+b,e=emap.get(k);
+            if(e===undefined){emap.set(k,ea.length);ea.push(a);eb.push(b);elv.push(c);}else if(c<elv[e])elv[e]=c;}
+          prev=cur;}}
+      if(++cntL%30===0)await sleep();
+    }
+    const STY=[{color:'#d500f9',weight:3.4},{color:'#ff6d00',weight:2.6},{color:'#00acc1',weight:1.5}],layers=[];
+    for(let c=2;c>=0;c--){
+      const adj=new Map(),ek=(a,b)=>a<b?a*8388608+b:b*8388608+a;
+      for(let e=0;e<ea.length;e++){if(elv[e]!==c)continue;
+        let x=adj.get(ea[e]);if(!x){x=[];adj.set(ea[e],x);}x.push(eb[e]);
+        let y=adj.get(eb[e]);if(!y){y=[];adj.set(eb[e],y);}y.push(ea[e]);}
+      const used=new Set(),paths=[];
+      const walk=(s,n)=>{const path=[s];used.add(ek(s,n));let cur=n;
+        for(;;){path.push(cur);const nb=adj.get(cur);if(!nb||nb.length!==2||cur===s)break;let nx=-1;for(const q of nb){if(!used.has(ek(cur,q))){nx=q;break;}}if(nx<0)break;used.add(ek(cur,nx));cur=nx;}
+        return path;};
+      adj.forEach((nb,n)=>{if(nb.length!==2)nb.forEach(m=>{if(!used.has(ek(n,m)))paths.push(walk(n,m));});});
+      adj.forEach((nb,n)=>{nb.forEach(m=>{if(!used.has(ek(n,m)))paths.push(walk(n,m));});});
+      if(paths.length)layers.push(L.polyline(paths.map(p=>p.map(i=>[vlat[i],vlng[i]])),{pane:'netPane',renderer:netRenderer,interactive:false,color:STY[c].color,weight:STY[c].weight,opacity:1,fill:false,smoothFactor:1.6,lineCap:'round',lineJoin:'round'}));
+      await sleep();
+    }
+    NETO.layer=L.layerGroup(layers).addTo(map);
+  }catch(e){console.error('netOtherUpdate',e);NETO.fail=true;NETO.sig='';admin.getLayers().filter(l=>l._kind==='admin').forEach(l=>restyle(l));}
+  finally{NETO.busy=false;setTimeout(()=>{netOtherUpdate().catch(()=>{});},80);}
+}
+
+function netEligible(l){const p=l._p;return !!p&&(!!p.localMahalle||isAyGadm(p)||(p.src==='gadm'&&(p.lvl===4||p.lvl===6)&&!!window.TR_NET)||(l._kind==='admin'&&!NETO.fail&&p.src!=='gadm'&&!p.localMahalle&&(l instanceof L.Polygon)));}
 function netHide(l){try{return !!NET&&NET.on&&netEligible(l);}catch(e){return false;}}
 map.createPane('netPane');map.getPane('netPane').style.zIndex=455;map.getPane('netPane').style.pointerEvents='none';
 const netRenderer=L.canvas({pane:'netPane',padding:0.5});
@@ -2006,6 +2076,7 @@ function netBuild(){
   });
 }
 function netUpdate(){
+  try{netOtherUpdate().catch(()=>{});}catch(e){}
   NET.pres=netPresence();netBuild();netProvUpdate();try{netMahUpdate().catch(()=>{});}catch(e){}
   const z=map.getZoom(),pa=NET.all?{il:true,ilce:true}:NET.pres['Aydın'];
   [['ilce',6],['il',4]].forEach(a=>{const ly=NET.layers[a[0]];if(!ly)return;const want=NET.on&&!!pa&&!!pa[a[0]]&&z>=a[1];
@@ -2013,6 +2084,7 @@ function netUpdate(){
 }
 function netShift(de,dn){Object.keys(NET.layers).forEach(k=>{const ly=NET.layers[k];ly.setLatLngs(shiftLL(ly.getLatLngs(),de,dn));});}
 function netShiftCat(cat,de,dn){
+  NETO.sig='';setTimeout(netUpdate,60);
   if(cat==='local'&&NET.made)netShift(de,dn);
   if(cat==='local')Object.keys(NETM.layers).forEach(d=>{const ly=NETM.layers[d];ly.setLatLngs(shiftLL(ly.getLatLngs(),de,dn));});
   if(cat==='gadm')Object.keys(NETP).forEach(n=>{const st=NETP[n];['il','ilce'].forEach(k=>{const ly=st[k];if(ly)ly.setLatLngs(shiftLL(ly.getLatLngs(),de,dn));});});
@@ -2298,7 +2370,7 @@ function goPlace(o){
   let sub=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);
   try{sub+='\nMGRS '+toMGRS(ll.lat,ll.lng);}catch(e){}
   box.querySelector('.note').style.whiteSpace='pre-line';box.querySelector('.note').textContent=(o.sub?o.sub+'\n':'')+sub;
-  const acts=[['A (başlangıç)',()=>{setRoutePoint('from',ll,o.title||null);toast('Başlangıç noktası: '+(o.title||'seçilen yer'));}],['B (varış)',()=>{setRoutePoint('to',ll,o.title||null);toast('Varış noktası: '+(o.title||'seçilen yer'));}],['Yer imi',()=>{const l=L.circleMarker(ll);setup(l,{name:o.title||'Yer imi',fill:'#e53935',stroke:'#ffffff',weight:2,radius:7,showLabel:true,labelSize:13},'draw');drawn.addLayer(l);autosave();toast('Yer imi eklendi.');}],['Kopyala',()=>{try{navigator.clipboard.writeText(ll.lat.toFixed(6)+', '+ll.lng.toFixed(6));toast('Koordinat kopyalandı.');}catch(e){}}],['Kaldır',()=>clearPlaceMarker()]];
+  const acts=[['Buraya git',()=>goHere(ll,o.title||null)],['A (başlangıç)',()=>{setRoutePoint('from',ll,o.title||null);toast('Başlangıç noktası: '+(o.title||'seçilen yer'));}],['B (varış)',()=>{setRoutePoint('to',ll,o.title||null);toast('Varış noktası: '+(o.title||'seçilen yer'));}],['Yer imi',()=>{const l=L.circleMarker(ll);setup(l,{name:o.title||'Yer imi',fill:'#e53935',stroke:'#ffffff',weight:2,radius:7,showLabel:true,labelSize:13},'draw');drawn.addLayer(l);autosave();toast('Yer imi eklendi.');}],['Kopyala',()=>{try{navigator.clipboard.writeText(ll.lat.toFixed(6)+', '+ll.lng.toFixed(6));toast('Koordinat kopyalandı.');}catch(e){}}],['Kaldır',()=>clearPlaceMarker()]];
   acts.forEach(a=>{const b=document.createElement('button');b.className='sm';b.textContent=a[0];b.onclick=ev=>{ev.stopPropagation();a[1]();};box.querySelector('.btns').appendChild(b);});
   placeMk.bindPopup(box,{minWidth:200}).openPopup();
   return placeMk;
@@ -2360,7 +2432,17 @@ function onSearchInput(){
     try{
       const rem=await photonSuggest(q,seq);
       if(rem&&seq===sgSeq)sgRender(local.concat(rem));
-    }catch(e){/* çevrimdışı: yalnız yerel öneriler */}
+    }catch(e){
+      try{
+        const r=await fetch('https://nominatim.openstreetmap.org/search?format=jsonv2&limit=6&accept-language=tr&q='+encodeURIComponent(q));
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        const list=await r.json();if(seq!==sgSeq)return;
+        const rem=list.map(it=>{const bb=it.boundingbox?it.boundingbox.map(Number):null,nm=it.display_name.split(',')[0],sb=it.display_name.split(',').slice(1,4).join(',');
+          return{kind:'Yer',title:nm,sub:sb,q:true,act:()=>goPlace({lat:+it.lat,lng:+it.lon,title:nm,sub:sb,bbox:bb?[[bb[0],bb[2]],[bb[1],bb[3]]]:null})};});
+        if(rem.length||local.length)sgRender(local.concat(rem));
+        else{const bx=$('results');bx.hidden=false;bx.innerHTML='<div class="sg">Sonuç bulunamadı. Farklı yazım deneyin (ör. “Kuşadası Aydın”).</div>';}
+      }catch(e2){if(seq===sgSeq&&!local.length){const bx=$('results');bx.hidden=false;bx.innerHTML='<div class="sg">Arama servisine ulaşılamadı. İnternet bağlantınızı kontrol edin; koordinat ve sınır adı aramaları çevrimdışı çalışır.</div>';}}
+    }
   },320);
 }
 $('q').addEventListener('input',onSearchInput);
@@ -2551,7 +2633,9 @@ function fromMGRS(str){
   const g=fromUTM(z,e,N,band<'N');
   return isFinite(g.lat)&&Math.abs(g.lat)<=90?{lat:g.lat,lng:g.lon}:null;
 }
+var LASTCLK=null;
 function showClick(ll){
+  LASTCLK=ll;{const g=$('cGoHere');if(g)g.hidden=false;}
   let t='Tıklanan: '+ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);
   try{const u=toUTM(ll.lat,ll.lng);t+='   UTM '+u.zone+u.band+' '+Math.round(u.E)+' '+Math.round(u.N);}catch(e){}
   t+='   MGRS '+toMGRS(ll.lat,ll.lng);$('cClick').textContent=t;
@@ -4065,6 +4149,52 @@ $('rtLoc').onclick=()=>{
   if(!navigator.geolocation){toast('Bu tarayıcı konum bilgisini desteklemiyor.');return;}
   navigator.geolocation.getCurrentPosition(p=>{setRoutePoint('from',{lat:p.coords.latitude,lng:p.coords.longitude},'Konumum ('+p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5)+')');map.setView([p.coords.latitude,p.coords.longitude],14);},e=>toast('Konum alınamadı: '+e.message),{enableHighAccuracy:true,timeout:15000});
 };
+
+/* ===== Buraya git: konumunuzdan seçilen noktaya süre ve mesafe ===== */
+function getMyLL(){
+  return new Promise((resolve,reject)=>{
+    try{if(GPS&&GPS.watch!==null&&GPS.ll)return resolve(L.latLng(GPS.ll.lat,GPS.ll.lng));}catch(e){}
+    if(!navigator.geolocation)return reject(new Error('Bu tarayıcı konum bilgisini desteklemiyor.'));
+    navigator.geolocation.getCurrentPosition(p=>resolve(L.latLng(p.coords.latitude,p.coords.longitude)),
+      e=>reject(new Error(e.code===1?'Konum izni verilmedi. Tarayıcı ayarlarından bu site için konuma izin verin.':'Konum alınamadı: '+e.message)),
+      {enableHighAccuracy:true,timeout:15000,maximumAge:30000});
+  });
+}
+function routeSummaryEl(){
+  const box=document.createElement('div');box.style.minWidth='220px';
+  const bird=map.distance(RT.from,RT.to);
+  let h='<b>Konumunuzdan buraya</b><div class="note" style="margin:2px 0 6px">Kuş uçuşu '+(bird/1000).toFixed(2)+' km</div><table class="rtt">';
+  RT_MODES.forEach(m=>{const r=RT.res[m.k];if(!r)return;
+    if(r.error){h+='<tr><td>'+m.n+'</td><td colspan="2" style="color:#c62828">'+esc(r.error)+'</td></tr>';return;}
+    h+='<tr><td><span class="dot" style="background:'+m.c+'"></span><b>'+m.n+'</b></td><td>'+(r.distance/1000).toFixed(1)+' km</td><td><b>'+fmtDur(r.duration)+'</b></td></tr>';});
+  h+='</table><div class="btns" style="margin:8px 0 0"><button class="sm" id="pgDet">Ayrıntılar</button></div>';
+  box.innerHTML=h;const d=box.querySelector('#pgDet');if(d)d.onclick=ev=>{ev.stopPropagation();openTab($('rtGo').closest('.tab').id,false);};
+  return box;
+}
+async function goHere(ll,label){
+  toast('Konumunuz alınıyor…',2500);
+  try{
+    const me=await getMyLL();
+    setRoutePoint('from',me,'Konumum ('+me.lat.toFixed(5)+', '+me.lng.toFixed(5)+')');
+    setRoutePoint('to',ll,label||null);
+    if(!RT_MODES.some(m=>$(m.id).checked))$('rtCar').checked=true;
+    await routeGo();
+    if(RT.mk.to&&Object.keys(RT.res).length){RT.mk.to.bindPopup(routeSummaryEl(),{minWidth:230}).openPopup();}
+    const ok=RT_MODES.filter(m=>RT.res[m.k]&&!RT.res[m.k].error).map(m=>m.n+' '+fmtDur(RT.res[m.k].duration)+' ('+(RT.res[m.k].distance/1000).toFixed(1)+' km)');
+    if(ok.length)toast(ok.join(' · '),9000);
+  }catch(e){toast(e.message,7000);}
+}
+function openPointPopup(ll){
+  const box=document.createElement('div');
+  box.innerHTML='<b>Seçilen nokta</b><div class="note" style="margin:3px 0 6px;white-space:pre-line"></div><div class="btns" style="margin:0"></div>';
+  let sub=ll.lat.toFixed(6)+', '+ll.lng.toFixed(6);try{sub+='\nMGRS '+toMGRS(ll.lat,ll.lng);}catch(e){}
+  box.querySelector('.note').textContent=sub;
+  const acts=[['Buraya git',()=>goHere(ll,null),'main'],['A (başlangıç)',()=>setRoutePoint('from',ll,null)],['B (varış)',()=>setRoutePoint('to',ll,null)],['Kopyala',()=>{try{navigator.clipboard.writeText(ll.lat.toFixed(6)+', '+ll.lng.toFixed(6));toast('Koordinat kopyalandı.');}catch(e){}}]];
+  acts.forEach(a=>{const b=document.createElement('button');b.className='sm'+(a[2]?' main':'');b.textContent=a[0];b.onclick=ev=>{ev.stopPropagation();map.closePopup();a[1]();};box.querySelector('.btns').appendChild(b);});
+  L.popup({minWidth:210}).setLatLng(ll).setContent(box).openOn(map);
+}
+map.on('contextmenu',e=>{try{if(meas.mode||paint.on)return;}catch(x){}LASTCLK=e.latlng;showClick(e.latlng);openPointPopup(e.latlng);});
+{const g=$('cGoHere');if(g)g.onclick=()=>{if(LASTCLK)goHere(LASTCLK,null);else toast('Önce haritada bir noktaya tıklayın.');};}
 $('rtClear').onclick=()=>{
   routeG.clearLayers();RT.from=RT.to=null;RT.txt={};RT.mk={};RT.res={};RT.active=null;RT.lines=[];RT.bird=null;
   $('rtFrom').value='';$('rtTo').value='';$('rtRes').innerHTML='';$('rtSteps').hidden=true;$('rtSteps').innerHTML='';
@@ -4482,6 +4612,35 @@ function qrSelUpdate(){
   if($('qsMah'))$('qsMah').onclick=()=>qrExec(Object.assign(base(),{il:s.il,ilce:s.level==='ilce'?s.name:'',lv:{il:false,ilce:false,mah:true}}));
   if($('qsSib'))$('qsSib').onclick=()=>qrExec(Object.assign(base(),{il:s.il,ilce:s.ilce,lv:{il:false,ilce:false,mah:true}}));
 }
+
+function qrHash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h);}
+function qrScopeLayers(){
+  const sc=$('qrScope')?$('qrScope').value:'sel';
+  if(sc==='sel')return qrOwned($('qrIl').value,$('qrIlce').value);
+  const all=admin.getLayers().filter(l=>l._p&&l._kind==='admin'&&!l._p.hidden);
+  if(sc==='all')return all;
+  const vb=map.getBounds();return all.filter(l=>{try{return vb.intersects(l.getBounds());}catch(e){return false;}});
+}
+function qrPaintExisting(){
+  const arr=qrScopeLayers().filter(l=>l._p&&l.getLatLngs);
+  if(!arr.length){qrMsg('Bu kapsamda haritada alan yok. Önce alan ekleyin.');return;}
+  const dn=window.LOCAL_DISTRICTS||{},mode=QR.mode==='none'?'ilce':QR.mode,op=+$('qrOp').value,P=QPAL[$('qrPal').value]||QPAL['Canlı'],col=$('qrCol').value;
+  const lvOf=l=>{const p=l._p;if(p.localMahalle)return 10;const n=parseInt(p.lvl);return isNaN(n)?6:n;};
+  const lv=arr.map(lvOf),hasMah=lv.some(x=>x>=8),hasIlce=lv.some(x=>x>=5&&x<8);
+  const grpName=l=>l._p.localMahalle?(dn[l._p.districtId]||''):(l._p.name||'');
+  const cnt={};let j=0;
+  try{BKup('Boyama öncesi');}catch(e){}
+  arr.forEach((l,i)=>{
+    const L0=lv[i],g=grpName(l);let c;
+    if(mode==='one')c=col;
+    else if(mode==='ilce')c=P(qrHash(fold(g))%48,48);
+    else if(mode==='mah')c=P(j++,arr.length);
+    else{cnt[g]=(cnt[g]||0)+1;c=hslHex((qrHash(fold(g))*137.508)%360,52+(cnt[g]%3)*9,36+((cnt[g]*23)%40));}
+    let o=op;if(L0<=4&&(hasIlce||hasMah))o=Math.min(op,0.2);else if(L0>=5&&L0<8&&hasMah)o=Math.min(op,0.4);
+    rgApply(l,{color:c,op:o},true);
+  });
+  updTips();autosave();qrMsg(arr.length+' alan boyandı.');
+}
 function wireQuickRegion(){
   const D=window.TR_SINIR;if(!D||!$('qrIl'))return;
   D.il.map(x=>x.n).sort((a,b)=>a.localeCompare(b,'tr')).forEach(n=>{const o=document.createElement('option');o.value=n;o.textContent=n+(hasLocal(n)?'  ●':'');$('qrIl').appendChild(o);});
@@ -4493,10 +4652,11 @@ function wireQuickRegion(){
   document.querySelectorAll('#qrMode button').forEach(b=>b.onclick=()=>setMode(b.dataset.m));setMode('ilce');
   $('qrOp').oninput=()=>{$('qrOpV').textContent=Math.round($('qrOp').value*100)+'%';};
   $('qrNetAll').onchange=()=>{NET.all=$('qrNetAll').checked;netUpdate();};
+  $('qrPaintEx').onclick=qrPaintExisting;
   $('qrGo').onclick=()=>qrExec(qrSpecFromUi(true));
   $('qrLine').onclick=()=>qrExec(qrSpecFromUi(false));
-  $('qrUnpaint').onclick=()=>{const arr=qrOwned($('qrIl').value,$('qrIlce').value);arr.forEach(l=>{l._p.colored=false;restyle(l);});autosave();qrMsg(arr.length?arr.length+' alanın rengi kaldırıldı.':'Bu seçimde haritada alan yok.');};
-  $('qrRemove').onclick=()=>{const arr=qrOwned($('qrIl').value,$('qrIlce').value);if(!arr.length){qrMsg('Bu seçimde haritada alan yok.');return;}
+  $('qrUnpaint').onclick=()=>{const arr=qrScopeLayers();arr.forEach(l=>{l._p.colored=false;restyle(l);});autosave();qrMsg(arr.length?arr.length+' alanın rengi kaldırıldı.':'Bu seçimde haritada alan yok.');};
+  $('qrRemove').onclick=()=>{const arr=qrScopeLayers();if(!arr.length){qrMsg('Bu seçimde haritada alan yok.');return;}
     if(arr.length>20&&!confirm(arr.length+' alan haritadan kaldırılacak. Devam edilsin mi?'))return;
     try{BKup('Alanları kaldırmadan önce');}catch(e){}
     arr.forEach(l=>{if(sel===l)select(null);admin.removeLayer(l);});updTips();netUpdate();autosave();qrRefreshInfo();qrMsg(arr.length+' alan kaldırıldı (Geri ile döndürebilirsiniz).');};
