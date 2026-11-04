@@ -1,23 +1,15 @@
-'use strict';
-const CACHE = 'azimap-shell-v2';
-const SHELL = ['index.html', 'manifest.json', 'icon.svg'].map(path => new URL(path, self.registration.scope).href);
-self.addEventListener('install', event => {
-  event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).catch(() => {}));
-  self.skipWaiting();
-});
-self.addEventListener('activate', event => {
-  event.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(key => key.startsWith('azimap-shell-') && key !== CACHE).map(key => caches.delete(key)))));
-  self.clients.claim();
-});
-self.addEventListener('fetch', event => {
-  const request = event.request;
-  if (request.method !== 'GET' || new URL(request.url).origin !== self.location.origin) return;
-  if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).then(response => {
-      if (response.ok) caches.open(CACHE).then(cache => cache.put(new URL('index.html', self.registration.scope).href, response.clone()));
-      return response;
-    }).catch(async () => (await caches.match(new URL('index.html', self.registration.scope).href)) || Response.error()));
-    return;
-  }
-  event.respondWith(caches.match(request).then(cached => cached || fetch(request)));
+/* AZİMap servis çalışanı: uygulama dosyasını ve kütüphaneleri çevrimdışı önbelleğe alır; harita kutucukları her zaman ağdan gelir. */
+const V='azimap-v4';
+const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.all(SHELL.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()));});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+self.addEventListener('fetch',e=>{
+  const r=e.request;if(r.method!=='GET')return;
+  const u=new URL(r.url);
+  const own=u.origin===location.origin,lib=/(^|\.)(cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net)$/.test(u.hostname);
+  if(!own&&!lib)return;                       /* harita kutucukları ve diğer ağ istekleri: ağdan */
+  e.respondWith(caches.match(r,{ignoreSearch:true}).then(hit=>{
+    const net=fetch(r).then(n=>{if(n&&(n.ok||n.type==='opaque')){const c=n.clone();caches.open(V).then(x=>x.put(r,c)).catch(()=>{});}return n;}).catch(()=>hit);
+    return hit||net;
+  }));
 });
