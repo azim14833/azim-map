@@ -477,6 +477,8 @@ body{overscroll-behavior:none;-webkit-tap-highlight-color:transparent}
 .leaflet-popup-content .rtt{width:100%;border-collapse:collapse}
 .leaflet-popup-content .rtt td{padding:3px 4px;border-bottom:1px solid #eef2f7}
 .leaflet-popup-content-wrapper{border-radius:14px;box-shadow:0 12px 32px rgba(15,23,42,.3)}
+
+body.srch #goto,body.srch .ugrp{opacity:0;pointer-events:none;transition:opacity .1s}
 </style>
 </head>
 <body>
@@ -3793,8 +3795,18 @@ function boundaryIndex(){
 }
 function searchBoundaries(q){
   q=fold(String(q).trim());if(q.length<2)return[];
+  /* “efeler mimar sinan mahallesi” gibi sorgular: dolgu sözcükleri atılır, her sözcük ad veya üst bölge içinde aranır */
+  const stop=new Set(['mahallesi','mahalle','mah','mh','ilcesi','ilce','ili','il','koyu','koy','belediyesi']);
+  let toks=q.split(/[\s,.\-\/]+/).filter(x=>x&&!stop.has(x));if(!toks.length)toks=[q];
   const out=[];
-  for(const e of boundaryIndex()){const i=e.f.indexOf(q);if(i>=0)out.push({e:e,s:(i===0?0:1)+(e.k==='il'?0:e.k==='ilce'?0.1:0.2)});}
+  for(const e of boundaryIndex()){
+    if(e.pf===undefined)e.pf=fold(e.p||'');
+    const hay=e.f+' '+e.pf;let ok=true,inName=0;
+    for(const x of toks){if(hay.indexOf(x)<0){ok=false;break;}if(e.f.indexOf(x)>=0)inName++;}
+    if(!ok||!inName)continue;
+    const first=toks.find(x=>e.f.indexOf(x)>=0),pre=first&&e.f.indexOf(first)===0?0:1;
+    out.push({e:e,s:(toks.length-inName)*2+pre+(e.k==='il'?0:e.k==='ilce'?0.1:0.2)});
+  }
   out.sort((a,b)=>a.s-b.s||a.e.n.localeCompare(b.e.n,'tr'));
   return out.slice(0,25).map(x=>x.e);
 }
@@ -4813,6 +4825,7 @@ async function snApply(){
   try{await flushSave(true);}catch(e){}
   setTimeout(()=>location.reload(),350);
 }
+try{new MutationObserver(()=>{document.body.classList.toggle('srch',!$('results').hidden);}).observe($('results'),{attributes:true,attributeFilter:['hidden']});}catch(e){}
 function wireSnap(){
   if(!$('snPick'))return;
   const upd=()=>{$('snRv').textContent=$('snR').value+' px';$('snTv').textContent=$('snTol').value;$('snMv').textContent=$('snMax').value+' m';};
