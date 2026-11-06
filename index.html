@@ -554,9 +554,9 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
 <nav id="rail"><div class="logo">A</div><div id="tabs"><button data-tab="t1" data-title="Harita ve katmanlar" class="on"><svg viewBox="0 0 24 24"><path d="M12 3 3 8l9 5 9-5-9-5z"/><path d="M3 13l9 5 9-5"/></svg><span>Harita</span></button><button data-tab="t2" data-title="Sınırlar"><svg viewBox="0 0 24 24"><path d="M4 7l6-3 9 4-2 9-8 3-5-6z"/></svg><span>Sınırlar</span></button><button data-tab="t3" data-title="Çizim ve semboller"><svg viewBox="0 0 24 24"><path d="M4 20l4-1 11-11-3-3L5 16l-1 4z"/><path d="M14 6l4 4"/></svg><span>Çizim</span></button><button data-tab="t8" data-title="İlçe sınırı çiz ve birleştir"><svg viewBox="0 0 24 24"><path d="M3 17c3-9 6 2 9-6s6 3 9-5"/><circle cx="3" cy="17" r="1.6"/><circle cx="21" cy="6" r="1.6"/></svg><span>Sınır çiz</span></button><button data-tab="t4" data-title="Rota ve ölçüm"><svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M6 17c0-7 12-3 12-10"/></svg><span>Rota</span></button><button data-tab="t6" data-title="Konum, iz ve pusula"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3"/></svg><span>Konum</span></button><button data-tab="t7" data-title="Ekip: canlı konum ve mesaj"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 19c0-3.5 3-5.5 6-5.5s6 2 6 5.5M15 14.2c3 0 6 1.5 6 4.8"/></svg><span>Ekip</span><b id="teamBadge" class="badge" hidden></b></button><button data-tab="t5" data-title="İndir ve kaydet"><svg viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg><span>İndir</span></button></div></nav>
 <aside id="side">
   <div id="sideHead"><span id="sideTitle">Harita ve katmanlar</span><button id="sheetClose" title="Kapat">×</button></div>
-  <div class="tab on" id="t1"><details class="card " open><summary>Hazır görünümler</summary><div class="cbody"><div class="gal"><button class="chip" data-p="hybrid"><span class="th" style="background:linear-gradient(135deg,#27412a,#5d7d46 55%,#c8b98a)"></span><b>Hibrit</b><small>Uydu + yollar + adlar</small></button><button class="chip" data-p="topohybrid"><span class="th" style="background:linear-gradient(135deg,#3b4a2c,#8b7d55 50%,#b5a37a)"></span><b>Topo-Hibrit</b><small>Uydu + izohips + gölge + adlar</small></button><button class="chip" data-p="sat"><span class="th" style="background:linear-gradient(135deg,#1b3a2a,#3f6b3c 60%,#8aa56a)"></span><b>Uydu</b><small>Yalnız uydu görüntüsü</small></button><button class="chip" data-p="clarity"><span class="th" style="background:linear-gradient(135deg,#223b2b,#4d7a4a 60%,#a9bf82)"></span><b>Uydu – net</b><small>Esri Clarity + adlar</small></button><button class="chip" data-p="tactical"><span class="th" style="background:linear-gradient(135deg,#d9e6c3,#b9c99a 50%,#e8dcb5)"></span><b>Taktik topo</b><small>Esri topo + izohips + gölge</small></button><button class="chip" data-p="topo"><span class="th" style="background:linear-gradient(135deg,#cfe3b8,#a9c786 50%,#ddd0a0)"></span><b>Topografik</b><small>OpenTopoMap izohips</small></button><button class="chip" data-p="natgeo"><span class="th" style="background:linear-gradient(135deg,#e8d9b0,#c7b27b 55%,#a7c48a)"></span><b>NatGeo</b><small>Esri National Geographic</small></button><button class="chip" data-p="street"><span class="th" style="background:linear-gradient(135deg,#f4f1e8,#dfe6ee 55%,#f0d9a8)"></span><b>Sokak</b><small>Esri sokak haritası</small></button><button class="chip" data-p="dark"><span class="th" style="background:linear-gradient(135deg,#1b2430,#2b3647 55%,#3a4a60)"></span><b>Gece</b><small>Koyu taktik taban</small></button></div><p class="note">Bir altlık yüklenemezse otomatik olarak başka kaynağa geçilir. Dışa aktarmada seçili görünümün tüm katmanları birleştirilir.</p></div></details>
+  <div class="tab on" id="t1"><details class="card " open><summary>Hazır görünümler</summary><div class="cbody"><div class="gal"><button class="chip" data-p="tactical"><span class="th" style="background:linear-gradient(135deg,#5b6b3a,#a89b6a 50%,#d9cfa8)"></span><b>Taktik</b><small>Google arazi + izohips + gölge</small></button><button class="chip" data-p="tacsat"><span class="th" style="background:linear-gradient(135deg,#3b4a2c,#8b7d55 50%,#b5a37a)"></span><b>Taktik uydu</b><small>Google uydu + izohips + adlar</small></button><button class="chip" data-p="hybrid"><span class="th" style="background:linear-gradient(135deg,#27412a,#5d7d46 55%,#c8b98a)"></span><b>Hibrit</b><small>Google uydu + yol ve yer adları</small></button><button class="chip" data-p="sat"><span class="th" style="background:linear-gradient(135deg,#1b3a2a,#3f6b3c 60%,#8aa56a)"></span><b>Uydu</b><small>Google uydu (yalnız görüntü)</small></button><button class="chip" data-p="terrain"><span class="th" style="background:linear-gradient(135deg,#6f8a5a,#b9c79a 55%,#e8e2c8)"></span><b>Arazi</b><small>Google arazi (sade)</small></button><button class="chip" data-p="topo"><span class="th" style="background:linear-gradient(135deg,#8aa56a,#d9cf9a 55%,#c8a06a)"></span><b>Topografik</b><small>OpenTopoMap izohips</small></button><button class="chip" data-p="street"><span class="th" style="background:linear-gradient(135deg,#f4f1e8,#dfe6ee 55%,#f0d9a8)"></span><b>Sokak</b><small>Google harita</small></button><button class="chip" data-p="osm"><span class="th" style="background:linear-gradient(135deg,#e8e0c8,#c9d8b0 55%,#a9c4de)"></span><b>OSM</b><small>OpenStreetMap sokak</small></button><button class="chip" data-p="natgeo"><span class="th" style="background:linear-gradient(135deg,#d8c48a,#9fb58a 55%,#7aa0b8)"></span><b>NatGeo</b><small>Esri National Geographic (en çok 12. seviye)</small></button><button class="chip" data-p="dark"><span class="th" style="background:linear-gradient(135deg,#1b2430,#2b3647 55%,#3a4a60)"></span><b>Gece</b><small>Koyu taktik taban</small></button></div><p class="note">Bir altlık yüklenemezse otomatik olarak başka kaynağa geçilir. Dışa aktarmada seçili görünümün tüm katmanları birleştirilir.</p></div></details>
 <details class="card " open><summary>Altlık ve üst katmanlar</summary><div class="cbody"><label>Altlık</label>
-      <select id="baseSel"><optgroup label="Taktik / topografik"><option value="googleter">Google Arazi (taktik altlık)</option><option value="otm">Topografik (OpenTopoMap)</option><option value="esrit">Topografik (Esri)</option><option value="natgeo">National Geographic (Esri)</option><option value="terrain">Arazi gölgeli (Esri)</option></optgroup><optgroup label="Uydu"><option value="googlesat">Google Uydu</option><option value="googlehyb">Google Hibrit</option><option value="esrii">Uydu (Esri – bazı yerlerde eski)</option><option value="clarity">Uydu – Clarity (Esri)</option></optgroup><optgroup label="Sokak"><option value="googlemap">Google Harita</option><option value="osm">Sokak (OpenStreetMap)</option><option value="osmfr">Sokak (OSM Fransa)</option><option value="esris">Sokak (Esri)</option></optgroup><optgroup label="Açık / koyu"><option value="cartolight">Açık gri (Esri)</option><option value="cartodark">Koyu / gece (Esri)</option></optgroup><option value="custom">Özel altlık (aşağıda)</option></select>
+      <select id="baseSel"><optgroup label="Taktik / topografik"><option value="googleter">Google Arazi (taktik altlık)</option><option value="otm">Topografik (OpenTopoMap)</option><option value="esrit">Topografik (Esri)</option><option value="natgeo">National Geographic (Esri)</option><option value="terrain">Arazi gölgeli (Esri)</option></optgroup><optgroup label="Uydu"><option value="googlesat">Google Uydu</option><option value="googlehyb">Google Hibrit</option><option value="esrii">Uydu (Esri – bazı yerlerde eski)</option><option value="eox">Sentinel-2 bulutsuz 2021 (EOX)</option></optgroup><optgroup label="Sokak"><option value="googlemap">Google Harita</option><option value="osm">Sokak (OpenStreetMap)</option><option value="osmfr">Sokak (OSM Fransa)</option><option value="osmhot">Sokak – insani harita (OSM HOT)</option><option value="esris">Sokak (Esri)</option></optgroup><optgroup label="Açık / koyu"><option value="cartolight">Açık gri (Esri)</option><option value="cartodark">Koyu / gece (Esri)</option></optgroup><option value="custom">Özel altlık (aşağıda)</option></select>
       <label class="chk"><input type="checkbox" id="ovRoads"> Yollar ve sokak adları (Google uydu üzerinde Google etiketleri)</label>
       <label class="chk"><input type="checkbox" id="ovLabels"> Yer adları (Google uydu üzerinde Google etiketleri)</label>
       <label class="chk"><input type="checkbox" id="ovPlaces"> Yer adları ve idari sınırlar (Esri, çizgili)</label>
@@ -565,7 +565,8 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       <label class="chk"><input type="checkbox" id="ovHill"> Gölgeli yükselti (Esri)</label>
       <label class="chk"><input type="checkbox" id="ovOtm"> OpenTopoMap (saydam)</label>
       <label class="chk"><input type="checkbox" id="ovTrails"> Yürüyüş rotaları</label>
-      <label class="chk"><input type="checkbox" id="ovRail"> Demiryolu</label></div></details>
+      <label class="chk"><input type="checkbox" id="ovRail"> Demiryolu</label>
+      <label>Koordinat ızgarası (taktik)</label><select id="ovGrid"><option value="">Yok</option><option value="utm">UTM (WGS84, otomatik dilim)</option><option value="ll">Enlem – boylam</option></select></div></details>
 <details class="card " open><summary>Ek katmanlar (WMS / XYZ)</summary><div class="cbody"><label>Hazır katman kataloğu</label>
       <div class="row"><div><select id="lyCat"></select></div><div style="flex:0 0 auto"><button id="lyCatAdd">Ekle</button></div></div>
       <hr>
@@ -590,7 +591,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       <input type="number" id="cMax" value="18" min="1" max="22">
       <div class="btns"><button class="main" id="cUse">Bu katmanı kullan</button></div>
     </div></details>
-<details class="card" open><summary>Görüntü kalitesi</summary><div class="cbody"><label class="chk"><input type="checkbox" id="hdRetina" checked> Yüksek çözünürlük (Retina): uydu görüntüsü keskin gelir</label><label class="chk"><input type="checkbox" id="wzCursor"> Tekerlek, imlecin olduğu noktaya doğru yakınlaştırsın (kapalıysa harita merkezine)</label><label class="chk"><input type="checkbox" id="hdSnap"> Net zoom: yakınlaştırma tam seviyelere oturur (bulanıklık olmaz)</label><label>Uydu çözünürlüğü</label><select id="qlMult"><option value="1">Standart (1×)</option><option value="2">Yüksek – Full HD (2×)</option><option value="4">Çok yüksek (4×, çok veri)</option></select><label>Görüntü verisi sınırı (yakında eski/boş görüntü çıkarsa düşür)</label><select id="qlMax"><option value="0">Otomatik (kaynağın sınırı)</option><option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option></select><label class="chk"><input type="checkbox" id="qlAuto" checked> “Veri yok” / boş kutucukları otomatik olarak bir üst seviyeden doldur (Esri uydu)</label><p class="note" style="margin:2px 0 0">Retina yalnızca yüksek yoğunluklu ekranlarda (telefon, dizüstü) etkili olur ve daha çok veri indirir. “Modern” altlıklar (CARTO) kendi 2× kutucuklarını kullanır.</p></div></details><details class="card"><summary>Çevrimdışı harita indir</summary><div class="cbody"><label>Kaynak</label><select id="ofSrc"><option value="esrii">Uydu (Esri)</option><option value="clarity">Uydu – Clarity (Esri)</option><option value="esris">Sokak (Esri)</option><option value="esrit">Topografik (Esri)</option></select><label>Alan</label><select id="ofArea"><option value="view">Ekranda görünen alan</option><option value="sel">Seçili çizimin alanı</option></select><div style="display:flex;gap:8px"><div style="flex:1"><label>En düşük seviye</label><input type="number" id="ofMin" min="1" max="19" value="12"></div><div style="flex:1"><label>En yüksek seviye</label><input type="number" id="ofMax" min="1" max="19" value="16"></div></div><div class="msg" id="ofInfo"></div><progress id="ofProg" value="0" max="1" hidden style="width:100%"></progress><div class="btns"><button id="ofCalc">Hesapla</button><button class="main" id="ofGo">İndir</button><button class="danger" id="ofStop" hidden>Durdur</button><button id="ofClear">İndirilenleri sil</button></div><p class="note">İndirme, haritayı bu cihazda saklar; uygulama yüklenmiş (ana ekrana eklenmiş) ve en az bir kez internetle açılmış olmalı. Esri görüntülerinin toplu indirilmesi Esri kullanım koşullarına tabidir; makul alanlarla sınırlı tutun. Google ve OSM kaynaklarında toplu indirme yoktur (kullanım koşulları).</p></div></details>
+<details class="card" open><summary>Görüntü kalitesi</summary><div class="cbody"><label class="chk"><input type="checkbox" id="hdRetina" checked> Yüksek çözünürlük (Retina): uydu görüntüsü keskin gelir</label><label class="chk"><input type="checkbox" id="wzCursor"> Tekerlek, imlecin olduğu noktaya doğru yakınlaştırsın (kapalıysa harita merkezine)</label><label class="chk"><input type="checkbox" id="hdSnap"> Net zoom: yakınlaştırma tam seviyelere oturur (bulanıklık olmaz)</label><label>Uydu çözünürlüğü</label><select id="qlMult"><option value="1">Standart (1×)</option><option value="2">Yüksek – Full HD (2×)</option><option value="4">Çok yüksek (4×, çok veri)</option></select><label>Görüntü verisi sınırı (yakında eski/boş görüntü çıkarsa düşür)</label><select id="qlMax"><option value="0">Otomatik (kaynağın sınırı)</option><option value="20">20</option><option value="19">19</option><option value="18">18</option><option value="17">17</option><option value="16">16</option></select><label class="chk"><input type="checkbox" id="qlAuto" checked> “Veri yok” / boş kutucukları otomatik olarak bir üst seviyeden doldur (Esri uydu)</label><p class="note" style="margin:2px 0 0">Retina yalnızca yüksek yoğunluklu ekranlarda (telefon, dizüstü) etkili olur ve daha çok veri indirir. Taktik ve uydu görünümlerinde “Uydu çözünürlüğü” seçeneği keskinliği artırır.</p></div></details><details class="card"><summary>Çevrimdışı harita indir</summary><div class="cbody"><label>Kaynak</label><select id="ofSrc"><option value="esrii">Uydu (Esri)</option><option value="esris">Sokak (Esri)</option><option value="esrit">Topografik (Esri)</option></select><label>Alan</label><select id="ofArea"><option value="view">Ekranda görünen alan</option><option value="sel">Seçili çizimin alanı</option></select><div style="display:flex;gap:8px"><div style="flex:1"><label>En düşük seviye</label><input type="number" id="ofMin" min="1" max="19" value="12"></div><div style="flex:1"><label>En yüksek seviye</label><input type="number" id="ofMax" min="1" max="19" value="16"></div></div><div class="msg" id="ofInfo"></div><progress id="ofProg" value="0" max="1" hidden style="width:100%"></progress><div class="btns"><button id="ofCalc">Hesapla</button><button class="main" id="ofGo">İndir</button><button class="danger" id="ofStop" hidden>Durdur</button><button id="ofClear">İndirilenleri sil</button></div><p class="note">İndirme, haritayı bu cihazda saklar; uygulama yüklenmiş (ana ekrana eklenmiş) ve en az bir kez internetle açılmış olmalı. Esri görüntülerinin toplu indirilmesi Esri kullanım koşullarına tabidir; makul alanlarla sınırlı tutun. Google ve OSM kaynaklarında toplu indirme yoktur (kullanım koşulları).</p></div></details>
 <details class="card"><summary>Yakınlaştırma ve görünüm</summary><div class="cbody"><label>Yakınlaştırma hızı</label>
       <select id="zmSpeed"><option value="slow" selected>Yavaş ve yumuşak</option><option value="normal">Normal</option><option value="fast">Hızlı</option></select>
       <p class="note">Fare tekerleği veya iki parmakla yakınlaştırma kademeli ve akıcıdır. Sınırlar altlıktaki çizgilerle tutmuyorsa Yer adları – sınır çizgisiz seçeneğini ve Sınırlar sekmesindeki Sınır hizalama bölümünü kullanın.</p></div></details>
@@ -1052,7 +1053,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
     <div id="viewSeg"><button id="btn2d" class="on">2B</button><button id="btn3d">3B</button></div>
     <button class="sharechip" id="shareChip" hidden></button>
     <div class="ugrp"><button class="ubtn" id="saveBtn" title="Çalışmanı kaydet: bu tarayıcıya ve GitHub'a (Ctrl+S)">💾 Kaydet</button><button class="ubtn" id="clearBtn" title="Tüm renklendirmeleri sil, harita ilk haline dönsün (önce kaydedilir)">🗑 Sil</button><button class="ubtn" id="ghOpenBtn" title="GitHub'daki son 20 kaydı aç">📂 Aç</button><button class="ubtn" id="resumeBtn" title="Kaldığım yerden devam et (son otomatik kayıt ve yedekler)">⟲ Devam</button><button class="ubtn" id="undoBtn" title="Geri al (Ctrl+Z)">Geri</button><button class="ubtn" id="redoBtn" title="İleri al (Ctrl+Y)">İleri</button><button class="ubtn" id="helpBtn" title="Kısayollar (?)">?</button></div>
-    <div id="chips"><button class="chip" data-p="tactical">Taktik</button><button class="chip" data-p="tacsat">Taktik uydu</button><button class="chip" data-p="hybrid">Hibrit</button><button class="chip" data-p="sat">Uydu</button><button class="chip" data-p="terrain">Arazi</button><button class="chip" data-p="topo">Topo</button><button class="chip" data-p="street">Sokak</button><button class="chip" data-p="osm">OSM</button><button class="chip" data-p="dark">Gece</button></div>
+    <div id="chips"><button class="chip" data-p="tacsat">Taktik uydu</button><button class="chip" data-p="hybrid">Hibrit</button><button class="chip" data-p="sat">Uydu</button><button class="chip" data-p="terrain">Arazi</button><button class="chip" data-p="topo">Topo</button><button class="chip" data-p="street">Sokak</button><button class="chip" data-p="osm">OSM</button><button class="chip" data-p="dark">Gece</button></div>
   </div>
   <div id="navpad" role="group" aria-label="Harita yönlendirme"><button class="np np-up" data-d="up" aria-label="Yukarı">▲</button><button class="np np-lf" data-d="left" aria-label="Sola">◀</button><button class="np np-rt" data-d="right" aria-label="Sağa">▶</button><button class="np np-dn" data-d="down" aria-label="Aşağı">▼</button><button id="npC" title="Konumuma git / kuzeye çevir">⌖</button><button class="npx" id="npRl" title="Sola döndür (basılı tut: sürekli)" aria-label="Sola döndür">⟲</button><button class="npx npcmp" id="npCmp" title="Kuzeye çevir" aria-label="Pusula: kuzeye çevir"><svg viewBox="0 0 36 36" width="36" height="36"><g id="npNeedle"><path d="M18 4 L23 18 L13 18 Z" fill="#ef4444"/><path d="M18 32 L23 18 L13 18 Z" fill="#e2e8f0"/></g><circle cx="18" cy="18" r="2" fill="#0b1f36"/></svg><span id="npDeg">0°</span></button><button class="npx" id="npRr" title="Sağa döndür (basılı tut: sürekli)" aria-label="Sağa döndür">⟳</button><button class="npx" id="npZi" title="Yakınlaştır (basılı tut: sürekli)" aria-label="Yakınlaştır">+</button><button class="npx" id="npZo" title="Uzaklaştır (basılı tut: sürekli)" aria-label="Uzaklaştır">−</button></div>
   <div id="ctl3d"><b>3B görünüm</b><label>Eğim</label><input type="range" id="t3Pitch" min="0" max="80" value="60"><label>Yükselti abartısı</label><input type="range" id="t3Ex" min="1" max="4" step="0.25" value="1.5"><div class="btns"><button id="t3North" class="sm">Kuzeye çevir</button></div></div>
@@ -1328,7 +1329,7 @@ function workingBase(k){
 }
 function onBaseTileError(){
   tileFail++;
-  if(tileFail===8&&tileOk===0){
+  if(tileFail===40&&tileOk===0){
     BASES[state.base]&&(BASES[state.base].status='fail');paintBaseStatus();
     const fb=BASES[state.base]&&BASES[state.base].fb;
     if(fb){toast((BASES[state.base].n||'Altlık')+' yüklenemedi; '+BASES[fb].n+' gösteriliyor.');state.base=fb;applyLayers();autosave();}
@@ -1352,6 +1353,10 @@ function baseFix(k){
   setTimeout(()=>{try{localStorage.setItem('azimap_mig_google','1');}catch(e){}MIGG=true;},8000);
   return BASES[k]?k:'googlesat';
 }
+BASES.natgeo.max=12;BASES.natgeo.fb='googleter';BASES.terrain.max=13;
+BASES.eox={n:'Sentinel-2 bulutsuz 2021 (EOX)',url:'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2021_3857/default/g/{z}/{y}/{x}.jpg',sub:['a'],max:14,attr:'Sentinel-2 cloudless by EOX (Copernicus Sentinel verisi 2021)',z:1,fb:'googlesat'};
+BASES.osmhot={n:'Sokak – insani harita (OSM HOT)',url:'https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',sub:['a','b','c'],max:20,attr:'© OpenStreetMap katkıcıları, HOT',z:1,fb:'osm'};
+delete BASES.clarity;delete PRESETS.clarity;delete PRESETS.topohybrid;BASE_ALIAS.clarity='googlesat';
 PRESETS.tactical={base:'googleter',shade:true,cont:true};
 PRESETS.tacsat={base:'googlesat',cont:true,labels:true};
 PRESETS.hybrid={base:'googlesat',labels:true};
@@ -1376,12 +1381,39 @@ function flatTile(im){
     return near/n>0.94;
   }catch(e){return false;}
 }
+const MIRR={
+  osm:{alts:['https://tile.openstreetmap.de/{z}/{x}/{y}.png','https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png'],altSub:['a','b','c']},
+  osmfr:{alts:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],altSub:['a']},
+  googlesat:{alts:['https://mts{s}.googleapis.com/vt?lyrs=s&x={x}&y={y}&z={z}'],altSub:['0','1','2','3']},
+  googlehyb:{alts:['https://mts{s}.googleapis.com/vt?lyrs=y&x={x}&y={y}&z={z}'],altSub:['0','1','2','3']},
+  googlemap:{alts:['https://mts{s}.googleapis.com/vt?lyrs=m&x={x}&y={y}&z={z}'],altSub:['0','1','2','3']},
+  googleter:{alts:['https://mts{s}.googleapis.com/vt?lyrs=p&x={x}&y={y}&z={z}'],altSub:['0','1','2','3']}
+};
+function mirrorsOf(d){const k=Object.keys(BASES).find(x=>BASES[x]===d),m=MIRR[k]||{};return{alts:(d.alts||[]).filter(u=>u!==d.url).concat(m.alts||[]),altSub:m.altSub||['a']};}
+const FailTile=L.TileLayer.extend({
+  createTile:function(coords,done){const t=L.TileLayer.prototype.createTile.call(this,coords,done);t._cc=coords;return t;},
+  _tileOnError:function(done,tile,e){
+    const al=this.options.alts||[];
+    if(tile._cc&&(tile._ai||0)<al.length){
+      const c=tile._cc,sd=this.options.altSub||['a'],z=c.z+(this.options.zoomOffset||0);
+      tile._ai=(tile._ai||0)+1;
+      tile.src=L.Util.template(al[tile._ai-1],{s:sd[Math.abs(c.x+c.y)%sd.length],x:c.x,y:c.y,z:z});return;
+    }
+    return L.TileLayer.prototype._tileOnError.call(this,done,tile,e);
+  }
+});
 const AutoTile=L.TileLayer.extend({
-  _tu:function(x,y,z){const sd=this.options.subdomains||['a'];return L.Util.template(this._url,{s:sd[Math.abs(x+y)%sd.length],x:x,y:y,z:z});},
+  _tu:function(x,y,z,ai){const sd=ai?(this.options.altSub||['a']):(this.options.subdomains||['a']),t=ai?this.options.alts[ai-1]:this._url;return L.Util.template(t,{s:sd[Math.abs(x+y)%sd.length],x:x,y:y,z:z});},
   createTile:function(coords,done){
     const self=this,cv=document.createElement('canvas');cv.width=cv.height=256;
-    const Z=coords.z+(this.options.zoomOffset||0);
-    const load=(x,y,z)=>new Promise((res,rej)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>res(im);im.onerror=()=>rej(new Error('tile'));im.src=self._tu(x,y,z);});
+    const Z=coords.z+(this.options.zoomOffset||0),na=(this.options.alts||[]).length;
+    const load=async(x,y,z)=>{
+      let err;
+      for(let ai=0;ai<=na;ai++)for(let cors=1;cors>=0;cors--){
+        try{return await new Promise((res,rej)=>{const im=new Image();if(cors)im.crossOrigin='anonymous';im.onload=()=>res(im);im.onerror=()=>rej(new Error('tile'));im.src=self._tu(x,y,z,ai);});}catch(e){err=e;}
+      }
+      throw err;
+    };
     (async()=>{
       let im;try{im=await load(coords.x,coords.y,Z);}catch(e){done(e,cv);return;}
       const g=cv.getContext('2d');
@@ -1389,8 +1421,8 @@ const AutoTile=L.TileLayer.extend({
         for(let k=1;k<=4&&Z-k>=8;k++){
           let p;try{p=await load(coords.x>>k,coords.y>>k,Z-k);}catch(e){break;}
           if(k===4||!flatTile(p)){
-            const s=256/Math.pow(2,k),sx=(coords.x-((coords.x>>k)<<k))*s,sy=(coords.y-((coords.y>>k)<<k))*s;
-            g.imageSmoothingQuality='high';g.drawImage(p,sx,sy,s,s,0,0,256,256);done(null,cv);return;
+            const sz=256/Math.pow(2,k),sx=(coords.x-((coords.x>>k)<<k))*sz,sy=(coords.y-((coords.y>>k)<<k))*sz;
+            g.imageSmoothingQuality='high';g.drawImage(p,sx,sy,sz,sz,0,0,256,256);done(null,cv);return;
           }
         }
       }
@@ -1400,13 +1432,13 @@ const AutoTile=L.TileLayer.extend({
   }
 });
 function makeBaseTile(d,op,idx){
-  const base=idx===0&&!!d.img,off=base?qlOff(d):0,lim=Math.max(5,(base&&QL.max)?Math.min(QL.max,d.max):d.max);
-  const o={subdomains:d.sub,maxNativeZoom:Math.max(1,lim-off),maxZoom:21,zIndex:d.z,attribution:d.attr,className:d.blend?'blend':'',opacity:op,keepBuffer:2,updateWhenZooming:false};
+  const base=idx===0&&!!d.img,off=base?qlOff(d):0,lim=Math.max(5,(base&&QL.max)?Math.min(QL.max,d.max):d.max),mi=mirrorsOf(d);
+  const o={subdomains:d.sub,maxNativeZoom:Math.max(1,lim-off),maxZoom:21,zIndex:d.z,attribution:d.attr,className:d.blend?'blend':'',opacity:op,keepBuffer:2,updateWhenZooming:false,alts:idx===0?mi.alts:[],altSub:mi.altSub};
   if(off){o.tileSize=256/Math.pow(2,off);o.zoomOffset=off;}else o.detectRetina=HD.on&&!!d.rt;
-  return(base&&d.auto&&QL.auto)?new AutoTile(d.url,o):L.tileLayer(d.url,o);
+  return(base&&d.auto&&QL.auto)?new AutoTile(d.url,o):new FailTile(d.url,o);
 }
 function applyLayers(){
-  if(BASES[state.base]&&BASES[state.base].status==='fail'){
+  if(false&&BASES[state.base]&&BASES[state.base].status==='fail'){
     const w=workingBase(state.base);
     if(w!==state.base){toast((BASES[state.base].n)+' bu ağda çalışmıyor; '+BASES[w].n+' gösteriliyor.');state.base=w;}
   }
@@ -1474,7 +1506,7 @@ function probeUrl(url,sub,cors){
   const t=tileXYof(39,33,7);
   return new Promise(res=>{
     const im=new Image();if(cors)im.crossOrigin='anonymous';
-    const tm=setTimeout(()=>{im.src='';res(false);},9000);
+    const tm=setTimeout(()=>{im.src='';res(false);},16000);
     im.onload=()=>{clearTimeout(tm);res(true);};
     im.onerror=()=>{clearTimeout(tm);res(false);};
     im.src=tileSrc({url:url,sub:sub},7,t.x,t.y);
@@ -1491,7 +1523,7 @@ async function probeObj(b){
 function paintBaseStatus(){
   const sel=$('baseSel');
   Array.from(sel.options).forEach(o=>{const b=BASES[o.value];if(!b)return;o.textContent=b.n+(b.status==='fail'?'  – çalışmıyor':b.status==='view'?'  – yalnız ekranda':'');});
-  document.querySelectorAll('.chip').forEach(c=>{const p=PRESETS[c.dataset.p];if(!p)return;const b=BASES[p.base];c.classList.toggle('bad',!!(b&&b.status==='fail'));c.title=b&&b.status==='fail'?'Bu ağda çalışmıyor, yedeği gösterilir':'';});
+  document.querySelectorAll('.chip').forEach(c=>{const p=PRESETS[c.dataset.p];if(!p)return;const b=BASES[p.base];c.classList.toggle('bad',!!(b&&b.status==='fail'));c.title=b&&b.status==='fail'?'Sınamada yanıt vermedi; yine de denenir (yedek sunucular otomatik kullanılır)':'';});
   const box=$('probeList');if(!box)return;
   box.innerHTML='';
   Object.keys(BASES).forEach(k=>{const b=BASES[k],d=document.createElement('div');d.className='pr '+(b.status||'wait');d.innerHTML='<span>'+esc(b.n)+'</span><b>'+(b.status==='ok'?'çalışıyor':b.status==='view'?'ekranda':b.status==='fail'?'çalışmıyor':'sınanıyor…')+'</b>';box.appendChild(d);});
@@ -1500,7 +1532,7 @@ async function probeAll(){
   const keys=Object.keys(BASES);let i=0;
   paintBaseStatus();
   const w=async()=>{while(i<keys.length){const k=keys[i++];await probeBase(k);paintBaseStatus();}};
-  await Promise.all([w(),w(),w()]);
+  await Promise.all([w(),w()]);
   await probeObj(OVERS.labelsD);await probeObj(OVERS.labelsL);
   {const cb=BASES[state.base];if(cb&&(cb.status==='fail'||cb.url!==cb.url0))applyLayers();}
   return keys.map(k=>BASES[k].status);
@@ -4202,7 +4234,7 @@ $('rtSwap').onclick=()=>{
 };
 $('rtLoc').onclick=()=>{
   if(!navigator.geolocation){toast('Bu tarayıcı konum bilgisini desteklemiyor.');return;}
-  navigator.geolocation.getCurrentPosition(p=>{setRoutePoint('from',{lat:p.coords.latitude,lng:p.coords.longitude},'Konumum ('+p.coords.latitude.toFixed(5)+', '+p.coords.longitude.toFixed(5)+')');map.setView([p.coords.latitude,p.coords.longitude],14);},e=>toast('Konum alınamadı: '+e.message),{enableHighAccuracy:true,timeout:15000});
+  navigator.geolocation.getCurrentPosition(p=>{const q=gpsAdj(p.coords.latitude,p.coords.longitude);setRoutePoint('from',{lat:q.lat,lng:q.lng},'Konumum ('+q.lat.toFixed(5)+', '+q.lng.toFixed(5)+')');map.setView([q.lat,q.lng],14);},e=>toast('Konum alınamadı: '+e.message),{enableHighAccuracy:true,timeout:15000});
 };
 
 /* ===== Buraya git: konumunuzdan seçilen noktaya süre ve mesafe ===== */
@@ -4210,9 +4242,9 @@ function getMyLL(){
   return new Promise((resolve,reject)=>{
     try{if(GPS&&GPS.watch!==null&&GPS.ll)return resolve(L.latLng(GPS.ll.lat,GPS.ll.lng));}catch(e){}
     if(!navigator.geolocation)return reject(new Error('Bu tarayıcı konum bilgisini desteklemiyor.'));
-    navigator.geolocation.getCurrentPosition(p=>resolve(L.latLng(p.coords.latitude,p.coords.longitude)),
+    navigator.geolocation.getCurrentPosition(p=>resolve(gpsAdj(p.coords.latitude,p.coords.longitude)),
       e=>reject(new Error(e.code===1?'Konum izni verilmedi. Tarayıcı ayarlarından bu site için konuma izin verin.':'Konum alınamadı: '+e.message)),
-      {enableHighAccuracy:true,timeout:15000,maximumAge:30000});
+      {enableHighAccuracy:true,timeout:20000,maximumAge:0});
   });
 }
 function routeSummaryEl(){
@@ -4955,7 +4987,8 @@ function alarmFire(msg){
 }
 function onPos(p){
   const c=p.coords,g=GPS;g.raw=L.latLng(c.latitude,c.longitude);g.lastP=p;const ll=L.latLng(c.latitude+(g.off?g.off.lat:0),c.longitude+(g.off?g.off.lng:0));
-  if(c.accuracy>300&&!g.wA){g.wA=1;toast('Konum doğruluğu zayıf (± '+Math.round(c.accuracy)+' m): bilgisayarlarda konum Wi-Fi/IP’den bulunur ve ~1 km kayabilir. Telefonda GPS açıkken çok daha doğrudur. “Konumu düzelt” ile elle düzeltebilirsin.',12000);}
+  if(!g.wA){g.wA=1;toast('Konum bulundu: ± '+Math.round(c.accuracy)+' m doğrulukla.',4000);}
+  if(c.accuracy>300&&!g.wB){g.wB=1;toast('Konum doğruluğu zayıf (± '+Math.round(c.accuracy)+' m): bilgisayarlarda konum Wi-Fi/IP’den bulunur ve ~1 km kayabilir. Telefonda GPS açıkken çok daha doğrudur. “Konumu düzelt” ile elle düzeltebilirsin.',12000);}
   g.ll=ll;g.acc=c.accuracy||0;g.alt=c.altitude;g.speed=c.speed;
   g.hd=(c.heading!=null&&!isNaN(c.heading))?c.heading:(g.compass!=null?g.compass:null);
   if(!g.marker){
@@ -4971,6 +5004,7 @@ function onPos(p){
   if(typeof gps3D==='function')gps3D();
   if(typeof teamOnPos==='function')teamOnPos();
 }
+function gpsAdj(la,ln){const o=GPS.off;return L.latLng(la+(o?o.lat:0),ln+(o?o.lng:0));}
 function onPosErr(e){toast('Konum alınamadı: '+(e.code===1?'izin verilmedi (tarayıcı/telefon ayarlarından konuma izin verin)':e.message),6000);}
 async function wakeOn(){try{if($('gpsWake').checked&&navigator.wakeLock)GPS.wake=await navigator.wakeLock.request('screen');}catch(e){}}
 function wakeOff(){try{GPS.wake&&GPS.wake.release();}catch(e){}GPS.wake=null;}
@@ -9582,7 +9616,7 @@ const OF={stop:false,
   }
 };
 try{
-  if(['esrii','clarity','esris','esrit'].includes(state.base))$('ofSrc').value=state.base;
+  if(['esrii','esris','esrit'].includes(state.base))$('ofSrc').value=state.base;
   const z=Math.round(map.getZoom());$('ofMin').value=Math.max(1,Math.min(19,z));$('ofMax').value=Math.max(1,Math.min(19,z+3));
   $('ofCalc').onclick=()=>OF.calc();$('ofGo').onclick=()=>OF.go();$('ofStop').onclick=()=>{OF.stop=true;};
   $('ofClear').onclick=async()=>{if(!confirm('İndirilen tüm çevrimdışı harita kutucukları silinsin mi?'))return;try{await caches.delete('azimap-tiles');$('ofInfo').textContent='Çevrimdışı harita silindi.';}catch(e){}};
@@ -9604,6 +9638,49 @@ try{
   };
   $('gpsFixReset').onclick=()=>{GPS.off=null;try{localStorage.removeItem('azimap_gpsoff');}catch(x){}if(GPS.lastP)onPos(GPS.lastP);toast('Konum düzeltmesi sıfırlandı.',4000);};
 }catch(e){console.error('gpsfix',e);}
+
+/* ===== Koordinat ızgarası: UTM veya enlem-boylam ===== */
+try{
+const UG={mode:'',lay:null};
+try{UG.mode=localStorage.getItem('azimap_grid')||'';}catch(e){}
+const UGrid=L.GridLayer.extend({
+  createTile:function(c){
+    const sz=this.getTileSize(),tile=document.createElement('canvas');tile.width=sz.x;tile.height=sz.y;
+    const g=tile.getContext('2d'),z=c.z,mode=UG.mode;if(!mode)return tile;
+    const org=c.scaleBy(sz),px=ll=>{const p=this._map.project(ll,z);return[p.x-org.x,p.y-org.y];};
+    const nwse=this._tileCoordsToNwSe(c),nw=nwse[0],se=nwse[1];
+    const dark=isDarkBase(),col=dark?'rgba(255,235,59,0.75)':'rgba(190,40,30,0.65)',tc=dark?'#fff8c4':'#7a1008',halo=dark?'rgba(0,0,0,0.75)':'rgba(255,255,255,0.85)';
+    g.lineWidth=1;g.strokeStyle=col;g.font='600 10px "Segoe UI",Arial,sans-serif';g.textBaseline='middle';
+    const label=(t,x,y)=>{g.lineWidth=3;g.strokeStyle=halo;g.strokeText(t,x,y);g.lineWidth=1;g.fillStyle=tc;g.fillText(t,x,y);g.strokeStyle=col;};
+    const inside=(x,y)=>x>14&&x<sz.x-34&&y>10&&y<sz.y-10;
+    if(mode==='utm'){
+      const cl=(nw.lat+se.lat)/2,cn=(nw.lng+se.lng)/2,zone=Math.floor((cn+180)/6)+1,south=cl<0;
+      const step=z<=8?100000:z<=11?10000:z<=14?1000:z<=17?100:10;
+      const P=[[nw.lat,nw.lng],[nw.lat,se.lng],[se.lat,nw.lng],[se.lat,se.lng]].map(q=>toUTM(q[0],q[1],zone));
+      let e0=1e12,e1=-1e12,n0=1e12,n1=-1e12;P.forEach(u=>{e0=Math.min(e0,u.E);e1=Math.max(e1,u.E);n0=Math.min(n0,u.N);n1=Math.max(n1,u.N);});
+      e0=Math.floor((e0-step)/step)*step;e1=Math.ceil((e1+step)/step)*step;n0=Math.floor((n0-step)/step)*step;n1=Math.ceil((n1+step)/step)*step;
+      if((e1-e0)/step>60||(n1-n0)/step>60)return tile;
+      const fmt=v=>step>=1000?String(Math.round(v/1000)):String(Math.round(v)%100000).padStart(step>=100?3:2,'0').slice(-3);
+      const ll=(E,N)=>{const r=fromUTM(zone,E,N,south);return px(L.latLng(r.lat,r.lon));};
+      for(let E=e0;E<=e1;E+=step){g.beginPath();let lab=null;for(let k=0;k<=8;k++){const N=n0+(n1-n0)*k/8,q=ll(E,N);if(k)g.lineTo(q[0],q[1]);else g.moveTo(q[0],q[1]);if(!lab&&inside(q[0],q[1])&&q[1]>sz.y*0.15)lab=q;}g.stroke();if(lab)label('E '+fmt(E),lab[0]+2,lab[1]);}
+      for(let N=n0;N<=n1;N+=step){g.beginPath();let lab=null;for(let k=0;k<=8;k++){const E=e0+(e1-e0)*k/8,q=ll(E,N);if(k)g.lineTo(q[0],q[1]);else g.moveTo(q[0],q[1]);if(!lab&&inside(q[0],q[1])&&q[0]>sz.x*0.15)lab=q;}g.stroke();if(lab)label('N '+fmt(N),lab[0],lab[1]-7);}
+    }else{
+      const st=z>=18?0.0005:z>=16?0.002:z>=14?0.005:z>=12?0.01:z>=10?0.05:z>=8?0.25:z>=6?1:5,dec=st<0.001?4:st<0.01?3:st<0.1?2:st<1?2:0;
+      for(let la=Math.ceil(se.lat/st)*st;la<=nw.lat;la+=st){const y=px(L.latLng(la,nw.lng))[1];g.beginPath();g.moveTo(0,y);g.lineTo(sz.x,y);g.stroke();if(y>10&&y<sz.y-10)label(la.toFixed(dec)+'°',16,y-7);}
+      for(let lo=Math.ceil(nw.lng/st)*st;lo<=se.lng;lo+=st){const x=px(L.latLng(nw.lat,lo))[0];g.beginPath();g.moveTo(x,0);g.lineTo(x,sz.y);g.stroke();if(x>14&&x<sz.x-34)label(lo.toFixed(dec)+'°',x+2,sz.y*0.5);}
+    }
+    return tile;
+  }
+});
+UG.apply=()=>{
+  if(UG.lay){map.removeLayer(UG.lay);UG.lay=null;}
+  if(UG.mode){UG.lay=new UGrid({zIndex:9,maxZoom:21,tileSize:256,keepBuffer:1,updateWhenZooming:false});UG.lay.addTo(map);}
+  $('ovGrid').value=UG.mode;
+};
+$('ovGrid').onchange=()=>{UG.mode=$('ovGrid').value;try{localStorage.setItem('azimap_grid',UG.mode);}catch(e){}UG.apply();};
+{const _al=applyLayers;applyLayers=function(){const r=_al.apply(this,arguments);try{UG.apply();}catch(e){}return r;};}
+UG.apply();
+}catch(e){console.error('grid',e);}
 /* açılışta GitHub ile eşitle */
 {const w=setInterval(()=>{if(!BOOT){clearInterval(w);setTimeout(()=>GH.boot(),1500);GH.refresh();}},300);}
 }catch(e){console.error('azimap-ek',e);}
