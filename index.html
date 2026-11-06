@@ -556,17 +556,9 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
   <div id="sideHead"><span id="sideTitle">Harita ve katmanlar</span><button id="sheetClose" title="Kapat">×</button></div>
   <div class="tab on" id="t1"><details class="card " open><summary>Hazır görünümler</summary><div class="cbody"><div class="gal"><button class="chip" data-p="hybrid"><span class="th" style="background:linear-gradient(135deg,#27412a,#5d7d46 55%,#c8b98a)"></span><b>Hibrit</b><small>Uydu + yollar + adlar</small></button><button class="chip" data-p="topohybrid"><span class="th" style="background:linear-gradient(135deg,#3b4a2c,#8b7d55 50%,#b5a37a)"></span><b>Topo-Hibrit</b><small>Uydu + izohips + gölge + adlar</small></button><button class="chip" data-p="sat"><span class="th" style="background:linear-gradient(135deg,#1b3a2a,#3f6b3c 60%,#8aa56a)"></span><b>Uydu</b><small>Yalnız uydu görüntüsü</small></button><button class="chip" data-p="clarity"><span class="th" style="background:linear-gradient(135deg,#223b2b,#4d7a4a 60%,#a9bf82)"></span><b>Uydu – net</b><small>Esri Clarity + adlar</small></button><button class="chip" data-p="tactical"><span class="th" style="background:linear-gradient(135deg,#d9e6c3,#b9c99a 50%,#e8dcb5)"></span><b>Taktik topo</b><small>Esri topo + izohips + gölge</small></button><button class="chip" data-p="topo"><span class="th" style="background:linear-gradient(135deg,#cfe3b8,#a9c786 50%,#ddd0a0)"></span><b>Topografik</b><small>OpenTopoMap izohips</small></button><button class="chip" data-p="natgeo"><span class="th" style="background:linear-gradient(135deg,#e8d9b0,#c7b27b 55%,#a7c48a)"></span><b>NatGeo</b><small>Esri National Geographic</small></button><button class="chip" data-p="street"><span class="th" style="background:linear-gradient(135deg,#f4f1e8,#dfe6ee 55%,#f0d9a8)"></span><b>Sokak</b><small>Esri sokak haritası</small></button><button class="chip" data-p="dark"><span class="th" style="background:linear-gradient(135deg,#1b2430,#2b3647 55%,#3a4a60)"></span><b>Gece</b><small>Koyu taktik taban</small></button></div><p class="note">Bir altlık yüklenemezse otomatik olarak başka kaynağa geçilir. Dışa aktarmada seçili görünümün tüm katmanları birleştirilir.</p></div></details>
 <details class="card " open><summary>Altlık ve üst katmanlar</summary><div class="cbody"><label>Altlık</label>
-      <select id="baseSel">
-        <option value="esrii">Uydu (Esri)</option><option value="osm">Sokak (OpenStreetMap)</option><option value="googlesat">Google Uydu</option><option value="googlehyb">Google Hibrit</option><option value="googlemap">Google Harita</option><option value="googleter">Google Arazi</option><option value="clarity">Uydu – Clarity (Esri)</option>
-        <option value="otm">Topografik (OpenTopoMap)</option><option value="esrit">Topografik (Esri)</option>
-        <option value="natgeo">National Geographic (Esri)</option><option value="terrain">Arazi gölgeli (Esri)</option>
-        <option value="esris">Sokak (Esri)</option><option value="osm">Sokak (OpenStreetMap)</option><option value="osmfr">Sokak (OSM Fransa)</option>
-        <option value="cartovoy">Sokak – sade (OpenStreetMap)</option><option value="cartolight">Açık gri (Esri)</option><option value="cartodark">Koyu / gece (Esri)</option><option value="esridark">Koyu / gece (Esri)</option>
-        <option value="cartovoy2">Modern sokak (CARTO Voyager)</option><option value="cartolight2">Modern açık (CARTO Positron)</option><option value="cartodark2">Modern koyu (CARTO Dark Matter)</option>
-        <option value="custom">Özel altlık (aşağıda)</option>
-      </select>
-      <label class="chk"><input type="checkbox" id="ovRoads"> Yollar ve sokak adları</label>
-      <label class="chk"><input type="checkbox" id="ovLabels"> Yer adları – sınır çizgisiz (CARTO)</label>
+      <select id="baseSel"><optgroup label="Taktik / topografik"><option value="googleter">Google Arazi (taktik altlık)</option><option value="otm">Topografik (OpenTopoMap)</option><option value="esrit">Topografik (Esri)</option><option value="natgeo">National Geographic (Esri)</option><option value="terrain">Arazi gölgeli (Esri)</option></optgroup><optgroup label="Uydu"><option value="googlesat">Google Uydu</option><option value="googlehyb">Google Hibrit</option><option value="esrii">Uydu (Esri – bazı yerlerde eski)</option><option value="clarity">Uydu – Clarity (Esri)</option></optgroup><optgroup label="Sokak"><option value="googlemap">Google Harita</option><option value="osm">Sokak (OpenStreetMap)</option><option value="osmfr">Sokak (OSM Fransa)</option><option value="esris">Sokak (Esri)</option></optgroup><optgroup label="Açık / koyu"><option value="cartolight">Açık gri (Esri)</option><option value="cartodark">Koyu / gece (Esri)</option></optgroup><option value="custom">Özel altlık (aşağıda)</option></select>
+      <label class="chk"><input type="checkbox" id="ovRoads"> Yollar ve sokak adları (Google uydu üzerinde Google etiketleri)</label>
+      <label class="chk"><input type="checkbox" id="ovLabels"> Yer adları (Google uydu üzerinde Google etiketleri)</label>
       <label class="chk"><input type="checkbox" id="ovPlaces"> Yer adları ve idari sınırlar (Esri, çizgili)</label>
       <label class="chk"><input type="checkbox" id="ovShade"> Gölge – hesaplanan (SRTM, çevrimiçi)</label>
       <label class="chk"><input type="checkbox" id="ovCont"> İzohips çizgileri – hesaplanan, yükseklik yazılı</label>
@@ -946,7 +938,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
       </div>
       <div class="btns"><button class="main" id="saveAsBtn">Farklı kaydet</button></div>
       <p class="note">DMZ paketi: tek dosyada proje.json (AZİMap'te "Aç" ile her şey geri yüklenir) ve doc.kml (Google Earth) bulunur. Standart bir ZIP'tir; uzantısını .kmz yaparak Google Earth'te de açabilirsiniz.</p></div></details></div>
-<div class="tab" id="t6"><details class="card" open><summary>Konum takibi</summary><div class="cbody"><div class="btns"><button class="main" id="gpsToggle">Takibi başlat</button><button id="gpsGo">Konumuma git</button></div>
+<div class="tab" id="t6"><details class="card" open><summary>Konum takibi</summary><div class="cbody"><div class="btns"><button class="main" id="gpsToggle">Takibi başlat</button><button id="gpsGo">Konumuma git</button><button id="gpsFix">Konumu düzelt</button><button id="gpsFixReset">Düzeltmeyi sıfırla</button></div>
       <label class="chk"><input type="checkbox" id="gpsFollow" checked> Haritayı konumumla birlikte kaydır</label>
       <label class="chk"><input type="checkbox" id="gpsWake" checked> Takipte ekranı açık tut</label>
       <div class="msg" id="gpsInfo">Takip kapalı.</div>
@@ -1060,7 +1052,7 @@ f.addEventListener('submit',function(e){e.preventDefault();if(good())open_();els
     <div id="viewSeg"><button id="btn2d" class="on">2B</button><button id="btn3d">3B</button></div>
     <button class="sharechip" id="shareChip" hidden></button>
     <div class="ugrp"><button class="ubtn" id="saveBtn" title="Çalışmanı kaydet: bu tarayıcıya ve GitHub'a (Ctrl+S)">💾 Kaydet</button><button class="ubtn" id="clearBtn" title="Tüm renklendirmeleri sil, harita ilk haline dönsün (önce kaydedilir)">🗑 Sil</button><button class="ubtn" id="ghOpenBtn" title="GitHub'daki son 20 kaydı aç">📂 Aç</button><button class="ubtn" id="resumeBtn" title="Kaldığım yerden devam et (son otomatik kayıt ve yedekler)">⟲ Devam</button><button class="ubtn" id="undoBtn" title="Geri al (Ctrl+Z)">Geri</button><button class="ubtn" id="redoBtn" title="İleri al (Ctrl+Y)">İleri</button><button class="ubtn" id="helpBtn" title="Kısayollar (?)">?</button></div>
-    <div id="chips"><button class="chip" data-p="hybrid">Hibrit</button><button class="chip" data-p="topohybrid">Topo-Hibrit</button><button class="chip" data-p="sat">Uydu</button><button class="chip" data-p="tactical">Taktik topo</button><button class="chip" data-p="topo">Topografik</button><button class="chip" data-p="street">Sokak</button><button class="chip" data-p="dark">Gece</button></div>
+    <div id="chips"><button class="chip" data-p="tactical">Taktik</button><button class="chip" data-p="tacsat">Taktik uydu</button><button class="chip" data-p="hybrid">Hibrit</button><button class="chip" data-p="sat">Uydu</button><button class="chip" data-p="terrain">Arazi</button><button class="chip" data-p="topo">Topo</button><button class="chip" data-p="street">Sokak</button><button class="chip" data-p="osm">OSM</button><button class="chip" data-p="dark">Gece</button></div>
   </div>
   <div id="navpad" role="group" aria-label="Harita yönlendirme"><button class="np np-up" data-d="up" aria-label="Yukarı">▲</button><button class="np np-lf" data-d="left" aria-label="Sola">◀</button><button class="np np-rt" data-d="right" aria-label="Sağa">▶</button><button class="np np-dn" data-d="down" aria-label="Aşağı">▼</button><button id="npC" title="Konumuma git / kuzeye çevir">⌖</button><button class="npx" id="npRl" title="Sola döndür (basılı tut: sürekli)" aria-label="Sola döndür">⟲</button><button class="npx npcmp" id="npCmp" title="Kuzeye çevir" aria-label="Pusula: kuzeye çevir"><svg viewBox="0 0 36 36" width="36" height="36"><g id="npNeedle"><path d="M18 4 L23 18 L13 18 Z" fill="#ef4444"/><path d="M18 32 L23 18 L13 18 Z" fill="#e2e8f0"/></g><circle cx="18" cy="18" r="2" fill="#0b1f36"/></svg><span id="npDeg">0°</span></button><button class="npx" id="npRr" title="Sağa döndür (basılı tut: sürekli)" aria-label="Sağa döndür">⟳</button><button class="npx" id="npZi" title="Yakınlaştır (basılı tut: sürekli)" aria-label="Yakınlaştır">+</button><button class="npx" id="npZo" title="Uzaklaştır (basılı tut: sürekli)" aria-label="Uzaklaştır">−</button></div>
   <div id="ctl3d"><b>3B görünüm</b><label>Eğim</label><input type="range" id="t3Pitch" min="0" max="80" value="60"><label>Yükselti abartısı</label><input type="range" id="t3Ex" min="1" max="4" step="0.25" value="1.5"><div class="btns"><button id="t3North" class="sm">Kuzeye çevir</button></div></div>
@@ -1097,6 +1089,7 @@ const sleep=()=>new Promise(r=>setTimeout(r,0));
 /* ================= Harita ================= */
 const ROT=!!(L.Map&&L.Map.prototype&&L.Map.prototype.setBearing);
 const map=L.map('map',{zoomSnap:0,zoomDelta:0.3,wheelPxPerZoomLevel:420,wheelDebounceTime:14,zoomAnimationThreshold:8,preferCanvas:false,zoomControl:false,rotate:ROT,bearing:0,touchRotate:false,shiftKeyRotate:false,rotateControl:false,trackContainerMutation:false}).setView([38.96,35.24],6);
+if(ROT){const _cp=map.createPane;map.createPane=function(n,c){return _cp.call(this,n,c||this._rotatePane||undefined);};}
 map.createPane('adminPane');map.getPane('adminPane').style.zIndex=450;map.getPane('adminPane').style.pointerEvents='auto';
 map.createPane('drawPane');map.getPane('drawPane').style.zIndex=460;map.getPane('drawPane').style.pointerEvents='auto';
 map._paneRenderers=map._paneRenderers||{};map._paneRenderers.adminPane=L.canvas({pane:'adminPane',padding:0.6});map._paneRenderers.drawPane=L.svg({pane:'drawPane',padding:0.6});
@@ -1169,9 +1162,9 @@ const LCAT=[
   {n:'Esri açık gri taban (üstte, saydam)',url:ESRI+'Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',sub:['a'],max:16,op:0.5},
   {n:'OpenTopoMap (saydam, çarpma)',url:OTMURL,sub:['a','b','c'],max:17,op:0.5,blend:'multiply'}
 ];
-const state={base:'esrii',ov:{shade:false,otm:false,hill:false,cont:false,roads:true,places:false,labels:true,trails:false,rail:false},layers:[],imgs:[],shift:{}};
+const state={base:'googleter',ov:{shade:true,otm:false,hill:false,cont:true,roads:false,places:false,labels:false,trails:false,rail:false},layers:[],imgs:[],shift:{}};
 let leaf=[],tileFail=0,tileOk=0;
-const isDarkBase=()=>['esrii','clarity','cartodark','esridark','custom'].includes(state.base);
+const isDarkBase=()=>['esrii','clarity','googlesat','googlehyb','cartodark','esridark','custom'].includes(state.base);
 
 /* ---- hesaplanan izohips ve gölge (AWS Terrain Tiles / Terrarium) ---- */
 const demCache=new Map();
@@ -1310,8 +1303,10 @@ function layerDefs(){
     const u=$('cUrl').value.trim();
     if(u)out.push({url:u,sub:['a','b','c'],max:+$('cMax').value||18,wms:$('cType').value==='wms'?($('cLayers').value.trim()||null):null,attr:'Özel katman',z:1});
   }else out.push(BASES[state.base]||BASES.esrii);
+  let gLab=false;
   OVK.forEach(k=>{
     if(!state.ov[k])return;
+    if(k==='roads'||k==='labels'){if(GBUILT[state.base])return;if(state.base==='googlesat'||state.base==='clarity'){if(!gLab){gLab=true;out.push(Object.assign({},OVERS.labelsG));}return;}}
     let src=OVERS[k];
     if(k==='labels'){src=isDarkBase()?OVERS.labelsD:OVERS.labelsL;if(src.status==='fail')src=OVERS.places;}
     const o=Object.assign({},src);if(o.gen==='cont')o.dark=isDarkBase();o._names=(k==='labels'||k==='places');out.push(o);
@@ -1340,6 +1335,32 @@ function onBaseTileError(){
     else toast('Altlık harita yüklenemedi (ağ veya sunucu engeli olabilir). Başka bir görünüm seçin.');
   }
 }
+
+/* ---- Google öncelikli altlıklar; CARTO (anahtar istiyor) yerine çalışan kaynaklar ---- */
+const GBUILT={googlehyb:1,googlemap:1,googleter:1};
+OVERS.labelsG={url:'https://mt{s}.google.com/vt/lyrs=h&x={x}&y={y}&z={z}',sub:['0','1','2','3'],max:20,attr:'© Google',z:5,_names:true};
+BASES.googlesat.n='Google Uydu (güncel)';BASES.googlehyb.n='Google Hibrit (uydu + yol/yer adı)';BASES.googlemap.n='Google Harita (sokak)';BASES.googleter.n='Google Arazi (taktik topo altlığı)';
+BASES.esrii.n='Uydu (Esri – bazı yerlerde eski)';BASES.esrii.fb='osm';
+['googlesat','googlehyb'].forEach(k=>{BASES[k].fb='osm';});BASES.googlemap.fb='osm';BASES.googleter.fb='otm';
+delete BASES.cartovoy2;delete BASES.cartolight2;delete BASES.cartodark2;
+const BASE_ALIAS={cartovoy2:'googlemap',cartolight2:'cartolight',cartodark2:'cartodark',cartovoy:'osm',esridark:'cartodark'};
+let MIGG=false;try{MIGG=localStorage.getItem('azimap_mig_google')==='1';}catch(e){}
+function baseFix(k){
+  if(k==='custom')return k;
+  if(BASE_ALIAS[k])k=BASE_ALIAS[k];
+  if(!MIGG&&k==='esrii')k='googlesat';
+  setTimeout(()=>{try{localStorage.setItem('azimap_mig_google','1');}catch(e){}MIGG=true;},8000);
+  return BASES[k]?k:'googlesat';
+}
+PRESETS.tactical={base:'googleter',shade:true,cont:true};
+PRESETS.tacsat={base:'googlesat',cont:true,labels:true};
+PRESETS.hybrid={base:'googlesat',labels:true};
+PRESETS.sat={base:'googlesat'};
+PRESETS.terrain={base:'googleter'};
+PRESETS.topo={base:'otm'};
+PRESETS.street={base:'googlemap'};
+PRESETS.osm={base:'osm'};
+PRESETS.dark={base:'cartodark'};
 /* ---- uydu çözünürlüğü: 1×/2×/4× kutucuk + “veri yok” kutucuklarını üst seviyeden doldurma ---- */
 ['esrii','clarity','googlesat'].forEach(k=>{if(BASES[k])BASES[k].img=true;});
 ['esrii','clarity'].forEach(k=>{if(BASES[k])BASES[k].auto=true;});
@@ -2706,7 +2727,7 @@ function loadProject(d){
   if(d.custom){$('cType').value=d.custom.type||'xyz';$('cUrl').value=d.custom.url||'';$('cLayers').value=d.custom.layers||'';$('cMax').value=d.custom.max||18;}
   if(d.state){state.base=d.state.base;Object.assign(state.ov,d.state.ov);state.layers=d.state.layers||[];state.imgs=d.state.imgs||[];state.shift=d.state.shift||{};shiftState();}
   else if(d.base){state.base=BASES[d.base]||d.base==='custom'?d.base:'esrii';}
-  if(state.base!=='custom'&&!BASES[state.base])state.base='esrii';
+  state.base=baseFix(state.base);
   applyLayers();
   (d.items||[]).filter(o=>o.k==='admin').forEach(build);
   (d.items||[]).filter(o=>o.k!=='admin').forEach(build);
@@ -4933,7 +4954,8 @@ function alarmFire(msg){
   }catch(e){}
 }
 function onPos(p){
-  const c=p.coords,ll=L.latLng(c.latitude,c.longitude),g=GPS;
+  const c=p.coords,g=GPS;g.raw=L.latLng(c.latitude,c.longitude);g.lastP=p;const ll=L.latLng(c.latitude+(g.off?g.off.lat:0),c.longitude+(g.off?g.off.lng:0));
+  if(c.accuracy>300&&!g.wA){g.wA=1;toast('Konum doğruluğu zayıf (± '+Math.round(c.accuracy)+' m): bilgisayarlarda konum Wi-Fi/IP’den bulunur ve ~1 km kayabilir. Telefonda GPS açıkken çok daha doğrudur. “Konumu düzelt” ile elle düzeltebilirsin.',12000);}
   g.ll=ll;g.acc=c.accuracy||0;g.alt=c.altitude;g.speed=c.speed;
   g.hd=(c.heading!=null&&!isNaN(c.heading))?c.heading:(g.compass!=null?g.compass:null);
   if(!g.marker){
@@ -9566,6 +9588,22 @@ try{
   $('ofClear').onclick=async()=>{if(!confirm('İndirilen tüm çevrimdışı harita kutucukları silinsin mi?'))return;try{await caches.delete('azimap-tiles');$('ofInfo').textContent='Çevrimdışı harita silindi.';}catch(e){}};
 }catch(e){}
 
+
+/* ---- konum düzeltme (elle ofset) ---- */
+try{
+  try{GPS.off=JSON.parse(localStorage.getItem('azimap_gpsoff')||'null');}catch(e){}
+  $('gpsFix').onclick=()=>{
+    if(!GPS.raw){toast('Önce “Takibi başlat” ile konumunu aç, konum gelince tekrar dene.',6000);return;}
+    toast('Haritada GERÇEKTEN bulunduğun noktaya dokun / tıkla.',9000);
+    map.once('click',e=>{
+      GPS.off={lat:e.latlng.lat-GPS.raw.lat,lng:e.latlng.lng-GPS.raw.lng};
+      try{localStorage.setItem('azimap_gpsoff',JSON.stringify(GPS.off));}catch(x){}
+      if(GPS.lastP)onPos(GPS.lastP);
+      toast('Konum düzeltildi ('+Math.round(map.distance(GPS.raw,e.latlng))+' m kaydırıldı).',6000);
+    });
+  };
+  $('gpsFixReset').onclick=()=>{GPS.off=null;try{localStorage.removeItem('azimap_gpsoff');}catch(x){}if(GPS.lastP)onPos(GPS.lastP);toast('Konum düzeltmesi sıfırlandı.',4000);};
+}catch(e){console.error('gpsfix',e);}
 /* açılışta GitHub ile eşitle */
 {const w=setInterval(()=>{if(!BOOT){clearInterval(w);setTimeout(()=>GH.boot(),1500);GH.refresh();}},300);}
 }catch(e){console.error('azimap-ek',e);}
