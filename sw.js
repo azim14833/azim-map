@@ -1,6 +1,6 @@
 /* AZİMap servis çalışanı: uygulama dosyasını ve kütüphaneleri çevrimdışı önbelleğe alır; harita kutucukları her zaman ağdan gelir. */
-const V='azimap-v6';
-const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];
+const V='azimap-v8';
+const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./apple-touch-icon.png','./icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.all(SHELL.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{
