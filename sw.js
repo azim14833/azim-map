@@ -1,11 +1,14 @@
 /* AZİMap servis çalışanı: uygulama dosyasını ve kütüphaneleri çevrimdışı önbelleğe alır; harita kutucukları her zaman ağdan gelir. */
-const V='azimap-v11';
+const V='azimap-v12';
+const TILEC='azimap-tiles';   /* çevrimdışı harita kutucukları (uygulama içinden indirilir) */
+const TILEHOST=/^(server|services)\.arcgisonline\.com$|^clarity\.maptiles\.arcgis\.com$/;
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./apple-touch-icon.png','./icon.svg'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(V).then(c=>Promise.all(SHELL.map(u=>c.add(u).catch(()=>{})))).then(()=>self.skipWaiting()));});
-self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
+self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V&&k!==TILEC).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));});
 self.addEventListener('fetch',e=>{
   const r=e.request;if(r.method!=='GET')return;
   const u=new URL(r.url);
+  if(TILEHOST.test(u.hostname)){e.respondWith(caches.open(TILEC).then(c=>c.match(r.url,{ignoreVary:true})).then(h=>h||fetch(r)).catch(()=>fetch(r)));return;}   /* önce indirilmiş harita, yoksa ağ */
   const own=u.origin===location.origin,lib=/(^|\.)(cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net)$/.test(u.hostname);
   if(!own&&!lib)return;                       /* harita kutucukları ve diğer ağ istekleri: ağdan */
   if(own&&(r.mode==='navigate'||u.pathname.endsWith('/')||u.pathname.endsWith('index.html'))){   /* uygulama sayfası: önce ağ (yeni sürüm hemen gelsin), çevrimdışıysa önbellek */
